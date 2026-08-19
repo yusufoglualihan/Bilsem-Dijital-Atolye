@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tarihçilerin Gizli Dosyası</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --parchment:#e9dcb8;
+    --parchment-light:#f3ead0;
+    --parchment-dark:#d8c69a;
+    --ink:#1b2a4a;
+    --ink-deep:#0f1a30;
+    --seal:#8c2f39;
+    --seal-dark:#6e2029;
+    --gold:#b8863e;
+    --gold-light:#d9ac5c;
+    --sepia:#2b2118;
+    --green:#3f6b4a;
+    --shadow: 0 12px 30px rgba(15,26,48,.35);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Lora',serif;
+    color:var(--parchment-light);
+    background:
+      radial-gradient(circle at 20% -10%, #24365c 0%, transparent 45%),
+      radial-gradient(circle at 100% 10%, #2c3f66 0%, transparent 40%),
+      linear-gradient(180deg, var(--ink-deep), var(--ink) 40%, #16233f 100%);
+    min-height:100vh;
+    padding: 28px 16px 60px;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.001ms !important; transition-duration:.001ms !important;}
+  }
+
+  .wrap{max-width:920px;margin:0 auto;}
+
+  /* ---------- HEADER ---------- */
+  header{text-align:center;margin-bottom:26px;}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:.72rem;
+    letter-spacing:.22em;
+    color:var(--gold-light);
+    text-transform:uppercase;
+    margin-bottom:10px;
+  }
+  h1{
+    font-family:'Cinzel',serif;
+    font-weight:800;
+    font-size:clamp(1.7rem, 4.2vw, 2.7rem);
+    color:var(--parchment-light);
+    margin:0 0 10px;
+    letter-spacing:.02em;
+    text-shadow:0 3px 0 rgba(0,0,0,.25);
+  }
+  .sub{
+    font-size:clamp(.92rem,1.6vw,1.05rem);
+    color:#c9d3e6;
+    max-width:560px;
+    margin:0 auto;
+    font-style:italic;
+  }
+
+  /* ---------- STEPPER / MAP ---------- */
+  .map{
+    position:relative;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin:32px auto 40px;
+    max-width:640px;
+    padding:0 6px;
+  }
+  .map::before{
+    content:"";
+    position:absolute;
+    top:50%; left:26px; right:26px;
+    height:0;
+    border-top:3px dashed rgba(216,198,154,.35);
+    transform:translateY(-50%);
+    z-index:0;
+  }
+  .stop{
+    position:relative;
+    z-index:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+    flex:1;
+  }
+  .seal-icon{
+    width:46px;height:46px;border-radius:50%;
+    background: radial-gradient(circle at 32% 28%, #4a5b80, var(--ink) 70%);
+    border:3px solid rgba(216,198,154,.4);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Cinzel',serif;font-weight:700;color:#8fa0c2;
+    transition: all .35s ease;
+    font-size:1.05rem;
+  }
+  .stop.active .seal-icon{
+    background: radial-gradient(circle at 32% 28%, var(--gold-light), var(--gold) 70%);
+    border-color:var(--gold-light);
+    color:var(--ink-deep);
+    box-shadow:0 0 0 6px rgba(184,134,62,.18), 0 6px 14px rgba(184,134,62,.4);
+  }
+  .stop.done .seal-icon{
+    background: radial-gradient(circle at 32% 28%, #b5495a, var(--seal) 70%);
+    border-color:var(--seal);
+    color:var(--parchment-light);
+    box-shadow:0 0 0 6px rgba(140,47,57,.18);
+  }
+  .stop.done .seal-icon::after{content:"✓";}
+  .stop.done .seal-icon{font-size:0;}
+  .stop.done .seal-icon::after{font-size:1.2rem;font-family:'Lora',serif;}
+  .stop-label{
+    font-family:'JetBrains Mono',monospace;
+    font-size:.62rem;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+    color:#9fadc9;
+    text-align:center;
+    max-width:80px;
+  }
+  .stop.active .stop-label{color:var(--gold-light);}
+
+  /* ---------- PANEL ---------- */
+  .panel{
+    background: linear-gradient(180deg, var(--parchment-light), var(--parchment) 92%);
+    border-radius:18px;
+    padding:clamp(20px,4vw,38px);
+    box-shadow:var(--shadow);
+    color:var(--sepia);
+    position:relative;
+    border:1px solid rgba(184,134,62,.4);
+    animation: rise .5s ease both;
+  }
+  @keyframes rise{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+  .panel::before{
+    content:"";
+    position:absolute;inset:8px;
+    border:1px solid rgba(43,33,24,.15);
+    border-radius:12px;
+    pointer-events:none;
+  }
+  .stage-title{
+    font-family:'Cinzel',serif;
+    font-weight:700;
+    font-size:clamp(1.15rem,2.6vw,1.5rem);
+    color:var(--ink);
+    margin:0 0 6px;
+  }
+  .stage-desc{
+    font-size:.94rem;
+    color:#5a4c3a;
+    margin:0 0 22px;
+    line-height:1.5;
+  }
+
+  /* ---------- STAGE 1: CARDS ---------- */
+  .card-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+    gap:16px;
+    margin-bottom:20px;
+  }
+  .card{
+    perspective:1000px;
+    height:200px;
+    cursor:pointer;
+  }
+  .card-inner{
+    position:relative;width:100%;height:100%;
+    transition:transform .6s cubic-bezier(.2,.8,.2,1);
+    transform-style:preserve-3d;
+  }
+  .card.flipped .card-inner{transform:rotateY(180deg);}
+  .card-face{
+    position:absolute;inset:0;
+    backface-visibility:hidden;
+    border-radius:12px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:14px;
+    text-align:center;
+  }
+  .card-front{
+    background:linear-gradient(160deg,#fff 0%, var(--parchment) 100%);
+    border:2px solid rgba(184,134,62,.5);
+  }
+  .medallion{
+    width:56px;height:56px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Cinzel',serif;font-weight:700;font-size:1.1rem;
+    color:#fff;margin-bottom:10px;
+    box-shadow:inset 0 0 0 3px rgba(255,255,255,.25);
+  }
+  .accent-gold{background:linear-gradient(150deg,var(--gold-light),var(--gold-dark,#8a642a));}
+  .accent-seal{background:linear-gradient(150deg,#b5495a,var(--seal-dark));}
+  .accent-ink{background:linear-gradient(150deg,#3c5488,var(--ink-deep));}
+  .card-name{font-family:'Lora',serif;font-weight:600;font-size:.9rem;color:var(--ink);line-height:1.25;}
+  .card-era{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#8a7754;margin-top:4px;letter-spacing:.03em;}
+  .flip-hint{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:#a89568;margin-top:8px;text-transform:uppercase;letter-spacing:.06em;}
+  .card-back{
+    background:linear-gradient(160deg,var(--ink),var(--ink-deep));
+    color:var(--parchment-light);
+    transform:rotateY(180deg);
+    border:2px solid var(--gold);
+  }
+  .card-back .card-name{color:var(--gold-light);font-size:.82rem;margin-bottom:6px;}
+  .card-back p{font-size:.72rem;line-height:1.45;margin:0 0 8px;color:#dfe4ef;}
+  .tag-pill{
+    font-family:'JetBrains Mono',monospace;
+    font-size:.56rem;
+    background:rgba(184,134,62,.25);
+    border:1px solid var(--gold-light);
+    color:var(--gold-light);
+    padding:3px 8px;border-radius:20px;
+    letter-spacing:.02em;
+  }
+  .progress-note{
+    font-family:'JetBrains Mono',monospace;
+    font-size:.72rem;color:#7a6a4d;text-align:center;margin-bottom:14px;
+  }
+
+  /* ---------- STAGE 2: MATCH ---------- */
+  .match-cols{display:grid;grid-template-columns:1fr 1fr;gap:22px;}
+  @media (max-width:600px){.match-cols{grid-template-columns:1fr;}}
+  .col-label{font-family:'JetBrains Mono',monospace;font-size:.65rem;text-transform:uppercase;letter-spacing:.08em;color:#8a7754;margin-bottom:10px;display:block;}
+  .chip{
+    display:block;width:100%;text-align:left;
+    background:#fff;border:2px solid rgba(184,134,62,.4);
+    border-radius:10px;padding:10px 14px;margin-bottom:9px;
+    font-family:'Lora',serif;font-weight:600;color:var(--ink);
+    cursor:pointer;font-size:.88rem;
+    transition:transform .18s, box-shadow .18s, border-color .18s;
+  }
+  .chip:hover{transform:translateY(-2px);box-shadow:0 6px 14px rgba(43,33,24,.12);}
+  .chip.selected{border-color:var(--seal);background:#fff2ee;box-shadow:0 0 0 3px rgba(140,47,57,.15);}
+  .chip.matched{opacity:.4;pointer-events:none;text-decoration:line-through;}
+  .zone{
+    background:rgba(255,255,255,.55);
+    border:2px dashed rgba(43,33,24,.25);
+    border-radius:10px;padding:10px 14px;margin-bottom:9px;
+    font-size:.82rem;color:#4a3d2c;cursor:pointer;
+    min-height:44px;display:flex;align-items:center;
+    transition:all .2s;
+  }
+  .zone:hover{border-color:var(--gold);}
+  .zone.correct{
+    background:rgba(63,107,74,.14);border:2px solid var(--green);color:var(--green);
+    font-weight:600;
+  }
+  .zone.shake{animation:shake .4s;border-color:var(--seal);}
+  @keyframes shake{20%{transform:translateX(-6px);}40%{transform:translateX(6px);}60%{transform:translateX(-4px);}80%{transform:translateX(4px);}100%{transform:translateX(0);}}
+  .match-score{text-align:center;font-family:'JetBrains Mono',monospace;font-size:.78rem;color:#7a6a4d;margin-top:6px;}
+
+  /* ---------- STAGE 3: QUIZ ---------- */
+  .quiz-q{margin-bottom:22px;padding-bottom:18px;border-bottom:1px dashed rgba(43,33,24,.15);}
+  .quiz-q:last-child{border-bottom:none;}
+  .q-text{font-weight:600;color:var(--ink);margin-bottom:10px;font-size:.95rem;}
+  .q-num{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:22px;height:22px;border-radius:50%;
+    background:var(--ink);color:var(--parchment-light);
+    font-family:'JetBrains Mono',monospace;font-size:.68rem;margin-right:8px;
+  }
+  .opt{
+    display:block;width:100%;text-align:left;
+    background:#fff;border:2px solid rgba(184,134,62,.35);
+    border-radius:9px;padding:9px 13px;margin-bottom:7px;
+    font-family:'Lora',serif;font-size:.85rem;color:var(--sepia);
+    cursor:pointer;transition:all .18s;
+  }
+  .opt:hover:not(.locked){border-color:var(--gold);transform:translateX(2px);}
+  .opt.correct{background:rgba(63,107,74,.15);border-color:var(--green);color:var(--green);font-weight:600;}
+  .opt.wrong{background:rgba(140,47,57,.1);border-color:var(--seal);color:var(--seal-dark);}
+  .opt.locked{cursor:default;}
+  .explain{font-size:.78rem;color:#5a4c3a;margin-top:6px;font-style:italic;padding-left:2px;}
+
+  /* ---------- STAGE 4: MISSION ---------- */
+  .letter{
+    background:var(--parchment-light);
+    border:2px solid rgba(184,134,62,.5);
+    border-radius:10px;padding:20px 22px;
+    position:relative;margin-bottom:18px;
+  }
+  .letter h3{font-family:'Cinzel',serif;color:var(--seal);font-size:1rem;margin:0 0 12px;}
+  .checklist{list-style:none;padding:0;margin:0;}
+  .checklist li{
+    display:flex;gap:10px;align-items:flex-start;
+    font-size:.86rem;color:var(--sepia);margin-bottom:10px;line-height:1.4;
+  }
+  .checklist li::before{
+    content:"✒";color:var(--seal);font-size:1rem;flex-shrink:0;margin-top:1px;
+  }
+
+  /* ---------- BUTTONS ---------- */
+  .btn-row{display:flex;justify-content:center;margin-top:24px;}
+  .btn{
+    font-family:'JetBrains Mono',monospace;
+    font-weight:600;font-size:.8rem;letter-spacing:.04em;text-transform:uppercase;
+    background:linear-gradient(150deg,var(--seal),var(--seal-dark));
+    color:#fff;border:none;padding:13px 30px;border-radius:30px;
+    cursor:pointer;box-shadow:0 8px 18px rgba(140,47,57,.35);
+    transition:transform .15s, box-shadow .15s;
+  }
+  .btn:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(140,47,57,.45);}
+  .btn:disabled{opacity:0;pointer-events:none;}
+  .btn.ghost{
+    background:transparent;color:var(--ink);border:2px solid var(--ink);
+    box-shadow:none;
+  }
+
+  /* ---------- FINALE ---------- */
+  .finale{text-align:center;}
+  .finale .big-seal{
+    width:110px;height:110px;border-radius:50%;
+    background:radial-gradient(circle at 32% 28%, #b5495a, var(--seal-dark) 75%);
+    margin:0 auto 18px;display:flex;align-items:center;justify-content:center;
+    font-family:'Cinzel',serif;font-size:2.2rem;color:var(--parchment-light);
+    box-shadow:0 0 0 8px rgba(140,47,57,.15), 0 12px 26px rgba(140,47,57,.4);
+    animation:stampIn .5s cubic-bezier(.2,1.4,.4,1) both;
+  }
+  @keyframes stampIn{from{transform:scale(2.2) rotate(-14deg);opacity:0;}to{transform:scale(1) rotate(-8deg);opacity:1;}}
+  .finale h2{font-family:'Cinzel',serif;color:var(--ink);font-size:1.5rem;margin:0 0 8px;}
+  .finale p{color:#5a4c3a;font-size:.92rem;margin:0 0 6px;}
+  .score-tag{
+    display:inline-block;margin-top:10px;font-family:'JetBrains Mono',monospace;
+    font-size:.78rem;background:var(--ink);color:var(--gold-light);
+    padding:6px 16px;border-radius:20px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">BİLSEM · Tarihi Tanıyoruz Modülü</div>
+    <h1>Tarihçilerin Gizli Dosyası</h1>
+    <p class="sub">Ünlü tarihçilerin peşine düş, çalışma alanlarını keşfet ve kendi dedektif rozetini kazan.</p>
+  </header>
+
+  <div class="map" id="map"></div>
+
+  <div class="panel" id="panel"></div>
+</div>
+
+<script>
+const historians = [
+  {id:'koprulu', initials:'MFK', name:'Mehmed Fuad Köprülü', era:'1890–1966',
+   blurb:'Modern Türk tarihçiliğinin kurucularından sayılır. Türk kurumlarının ve kültürünün kökenlerini bilimsel yöntemlerle, geniş bir bakış açısıyla araştırdı.',
+   area:'Türk Tarihi ve Kurumları', accent:'gold'},
+  {id:'kafesoglu', initials:'İK', name:'İbrahim Kafesoğlu', era:'1914–1984',
+   blurb:'Selçuklu ve Türk tarihinin önemli isimlerinden biridir. Türklerin İslam öncesi ve sonrası tarihini derinlemesine inceledi.',
+   area:'Selçuklu ve Genel Türk Tarihi', accent:'seal'},
+  {id:'barkan', initials:'ÖLB', name:'Ömer Lütfi Barkan', era:'1902–1979',
+   blurb:'Osmanlı tahrir defterlerini ilk kez sistematik biçimde inceleyerek Osmanlı toplumunun ekonomik yapısını gün yüzüne çıkardı.',
+   area:'Osmanlı Sosyal ve İktisadi Tarihi', accent:'ink'},
+  {id:'akurgal', initials:'EA', name:'Ekrem Akurgal', era:'1911–2002',
+   blurb:'Anadolu arkeolojisinin öncülerindendir. Kazı çalışmalarıyla Anadolu\'nun eskiçağ uygarlıklarını dünyaya tanıttı.',
+   area:'Eskiçağ Tarihi ve Arkeoloji', accent:'gold'},
+  {id:'afetinan', initials:'Aİ', name:'Afet İnan', era:'1908–1985',
+   blurb:'Cumhuriyet dönemi tarihçiliğinin öncülerindendir. Türk Tarih Tezi çalışmalarında ve tarih eğitiminde önemli rol oynadı.',
+   area:'Türk Tarih Tezi ve Cumhuriyet Dönemi', accent:'seal'},
+  {id:'braudel', initials:'FB', name:'Fernand Braudel', era:'1902–1985',
+   blurb:'Fransız tarihçi. "Akdeniz" adlı eseriyle coğrafyayı, iklimi ve uzun soluklu değişimleri tarihe dahil eden Annales ekolünün öncüsüdür.',
+   area:'Akdeniz Tarihi ve Annales Ekolü', accent:'ink'},
+];
+
+const quiz = [
+  {
+    q:'Bir sergiye küratörlük eden, bir dizinin danışmanlığını yapan ya da bir şirkete tarihi konularda yol gösteren biri hangi meslekten olabilir?',
+    opts:[
+      'Sadece bir öğretmen olabilir',
+      'Bir tarihçi olabilir — tarihçiler okul dışında da birçok alanda çalışır',
+      'Bir tarihçi bunları asla yapamaz',
+      'Sadece bir gazeteci olabilir'
+    ], correct:1,
+    explain:'Tarihçiler artık yalnızca okullarda değil; müzelerde, sergilerde, medyada ve kurumlarda danışman olarak da çalışıyor.'
+  },
+  {
+    q:'Bir bilim tarihçisi (örneğin astronomi tarihi üzerine çalışan biri) neyi de iyi bilmek zorundadır?',
+    opts:[
+      'Hiçbir ek bilgiye gerek yoktur',
+      'Sadece resim yapmayı bilmelidir',
+      'İncelediği bilim dalını (astronomi, tıp, fizik vb.) da iyi derecede bilmelidir',
+      'Sadece yabancı dil bilmesi yeterlidir'
+    ], correct:2,
+    explain:'Bilim tarihçisi, hem tarihsel yöntemi hem de incelediği bilim dalının kendisini iyi bilmek zorundadır.'
+  },
+  {
+    q:'Ömer Lütfi Barkan, hangi kaynakları ilk kez sistematik biçimde inceleyerek Osmanlı toplumu hakkında önemli bulgulara ulaştı?',
+    opts:['Gazete arşivlerini','Tahrir defterlerini','Mektup koleksiyonlarını','Haritaları'],
+    correct:1,
+    explain:'Barkan, Osmanlı tahrir defterlerini ilk defa sistematik olarak inceleyerek zirai, sosyal ve demografik önemlerini ortaya koydu.'
+  },
+  {
+    q:'"İşi ehline neden sormalıyız?" sorusu bize temelde neyi hatırlatır?',
+    opts:[
+      'Bir konuda o alanın uzmanına danışmanın değerli olduğunu',
+      'Uzmana sormaya hiç gerek olmadığını',
+      'Herkesin her konuda eşit derecede uzman olduğunu',
+      'Sadece internetten araştırmanın yeterli olduğunu'
+    ], correct:0,
+    explain:'Bir alanda derinlemesine bilgiye ulaşmak için o alanın uzmanına (ehline) danışmak, araştırmanın en güvenilir yollarından biridir.'
+  }
+];
+
+const stages = ['Kimlik Kartları','Alan Bulmacası','Dedektif Sınavı','Görev Zarfı'];
+let stageIndex = 0;
+
+// state
+let flippedCount = 0;
+let selectedChip = null;
+let matchedCount = 0;
+let matchAssign = {}; // zoneId -> historianId matched
+let quizState = quiz.map(()=>({answered:false, correct:false}));
+
+function renderMap(){
+  const map = document.getElementById('map');
+  map.innerHTML = stages.map((label,i)=>{
+    let cls = 'stop';
+    if(i < stageIndex) cls += ' done';
+    else if(i === stageIndex) cls += ' active';
+    return `<div class="${cls}"><div class="seal-icon">${i+1}</div><div class="stop-label">${label}</div></div>`;
+  }).join('');
+}
+
+function goTo(i){
+  stageIndex = i;
+  renderMap();
+  renderPanel();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function renderPanel(){
+  const panel = document.getElementById('panel');
+  if(stageIndex === 0) renderStage1(panel);
+  else if(stageIndex === 1) renderStage2(panel);
+  else if(stageIndex === 2) renderStage3(panel);
+  else if(stageIndex === 3) renderStage4(panel);
+  else renderFinale(panel);
+}
+
+/* ---------------- STAGE 1 ---------------- */
+function renderStage1(panel){
+  panel.innerHTML = `
+    <h2 class="stage-title">1 · Kimlik Kartlarını Aç</h2>
+    <p class="stage-desc">Aşağıdaki mühürlü kartlara tıklayarak tarihçilerin kimliklerini ortaya çıkar. Her kartı en az bir kez çevir.</p>
+    <div class="progress-note" id="s1-progress">0 / ${historians.length} kart açıldı</div>
+    <div class="card-grid" id="card-grid"></div>
+    <div class="btn-row"><button class="btn" id="s1-next" disabled>Alan Bulmacasına Geç →</button></div>
+  `;
+  const grid = document.getElementById('card-grid');
+  grid.innerHTML = historians.map(h => `
+    <div class="card" data-id="${h.id}">
+      <div class="card-inner">
+        <div class="card-face card-front">
+          <div class="medallion accent-${h.accent}">${h.initials}</div>
+          <div class="card-name">${h.name}</div>
+          <div class="card-era">${h.era}</div>
+          <div class="flip-hint">Çevirmek için dokun</div>
+        </div>
+        <div class="card-face card-back">
+          <div class="card-name">${h.name}</div>
+          <p>${h.blurb}</p>
+          <span class="tag-pill">${h.area}</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+  const seen = new Set();
+  grid.querySelectorAll('.card').forEach(cardEl => {
+    cardEl.addEventListener('click', ()=>{
+      cardEl.classList.toggle('flipped');
+      const id = cardEl.dataset.id;
+      if(!seen.has(id)){
+        seen.add(id);
+        document.getElementById('s1-progress').textContent = `${seen.size} / ${historians.length} kart açıldı`;
+        if(seen.size === historians.length){
+          document.getElementById('s1-next').disabled = false;
+        }
+      }
+    });
+  });
+  document.getElementById('s1-next').addEventListener('click', ()=> goTo(1));
+}
+
+/* ---------------- STAGE 2 ---------------- */
+function renderStage2(panel){
+  matchedCount = 0;
+  selectedChip = null;
+  matchAssign = {};
+  const shuffledAreas = [...historians].sort(()=>Math.random()-0.5);
+  panel.innerHTML = `
+    <h2 class="stage-title">2 · Tarihçiyi Alanıyla Eşleştir</h2>
+    <p class="stage-desc">Önce bir tarihçi seç, sonra onun çalışma alanına tıkla. Doğru eşleşme mühürlenecek!</p>
+    <div class="match-cols">
+      <div>
+        <span class="col-label">Tarihçiler</span>
+        <div id="chip-list"></div>
+      </div>
+      <div>
+        <span class="col-label">Çalışma Alanları</span>
+        <div id="zone-list"></div>
+      </div>
+    </div>
+    <div class="match-score" id="match-score">0 / ${historians.length} doğru eşleşme</div>
+    <div class="btn-row"><button class="btn" id="s2-next" disabled>Dedektif Sınavına Geç →</button></div>
+  `;
+  const chipList = document.getElementById('chip-list');
+  chipList.innerHTML = historians.map(h => `<button class="chip" data-id="${h.id}">${h.name}</button>`).join('');
+  const zoneList = document.getElementById('zone-list');
+  zoneList.innerHTML = shuffledAreas.map(h => `<div class="zone" data-answer="${h.id}">${h.area}</div>`).join('');
+
+  chipList.querySelectorAll('.chip').forEach(chip=>{
+    chip.addEventListener('click', ()=>{
+      if(chip.classList.contains('matched')) return;
+      chipList.querySelectorAll('.chip').forEach(c=>c.classList.remove('selected'));
+      chip.classList.add('selected');
+      selectedChip = chip.dataset.id;
+    });
+  });
+  zoneList.querySelectorAll('.zone').forEach(zone=>{
+    zone.addEventListener('click', ()=>{
+      if(zone.classList.contains('correct') || !selectedChip) return;
+      if(zone.dataset.answer === selectedChip){
+        zone.classList.add('correct');
+        zone.textContent = historians.find(h=>h.id===selectedChip).area + '  ✓ ' + historians.find(h=>h.id===selectedChip).name;
+        const chipEl = chipList.querySelector(`.chip[data-id="${selectedChip}"]`);
+        chipEl.classList.add('matched');
+        chipEl.classList.remove('selected');
+        matchedCount++;
+        selectedChip = null;
+        document.getElementById('match-score').textContent = `${matchedCount} / ${historians.length} doğru eşleşme`;
+        if(matchedCount === historians.length){
+          document.getElementById('s2-next').disabled = false;
+        }
+      } else {
+        zone.classList.add('shake');
+        setTimeout(()=>zone.classList.remove('shake'), 400);
+      }
+    });
+  });
+  document.getElementById('s2-next').addEventListener('click', ()=> goTo(2));
+}
+
+/* ---------------- STAGE 3 ---------------- */
+function renderStage3(panel){
+  quizState = quiz.map(()=>({answered:false, correct:false}));
+  panel.innerHTML = `
+    <h2 class="stage-title">3 · Dedektif Sınavı</h2>
+    <p class="stage-desc">Metinlerden öğrendiklerini kullanarak aşağıdaki soruları yanıtla.</p>
+    <div id="quiz-list"></div>
+    <div class="btn-row"><button class="btn" id="s3-next" disabled>Görev Zarfını Aç →</button></div>
+  `;
+  const list = document.getElementById('quiz-list');
+  list.innerHTML = quiz.map((item,qi)=>`
+    <div class="quiz-q" data-qi="${qi}">
+      <div class="q-text"><span class="q-num">${qi+1}</span>${item.q}</div>
+      <div class="opts">
+        ${item.opts.map((o,oi)=>`<button class="opt" data-oi="${oi}">${o}</button>`).join('')}
+      </div>
+      <div class="explain" style="display:none;"></div>
+    </div>
+  `).join('');
+  list.querySelectorAll('.quiz-q').forEach(qEl=>{
+    const qi = parseInt(qEl.dataset.qi);
+    qEl.querySelectorAll('.opt').forEach(optEl=>{
+      optEl.addEventListener('click', ()=>{
+        if(quizState[qi].answered) return;
+        const oi = parseInt(optEl.dataset.oi);
+        const correct = quiz[qi].correct;
+        quizState[qi].answered = true;
+        quizState[qi].correct = (oi === correct);
+        qEl.querySelectorAll('.opt').forEach((el,i)=>{
+          el.classList.add('locked');
+          if(i === correct) el.classList.add('correct');
+          else if(i === oi) el.classList.add('wrong');
+        });
+        const ex = qEl.querySelector('.explain');
+        ex.textContent = quiz[qi].explain;
+        ex.style.display = 'block';
+        if(quizState.every(s=>s.answered)){
+          document.getElementById('s3-next').disabled = false;
+        }
+      });
+    });
+  });
+  document.getElementById('s3-next').addEventListener('click', ()=> goTo(3));
+}
+
+/* ---------------- STAGE 4 ---------------- */
+function renderStage4(panel){
+  panel.innerHTML = `
+    <h2 class="stage-title">4 · Görev Zarfı</h2>
+    <p class="stage-desc">Son görevin seni bekliyor. Bu görevi kağıt üzerinde, öğretmeninin yönergesiyle tamamlayacaksın.</p>
+    <div class="letter">
+      <h3>Danışmanlık Başvuru Mektubu Görevi</h3>
+      <ul class="checklist">
+        <li>Etkinlikte tanıdığın çalışma alanlarından birini seç ve o alanın uzmanı bir tarihçiye mektup yaz.</li>
+        <li><strong>Giriş:</strong> Kendini tanıt; hangi BİLSEM programında, hangi çalışmada yer aldığını anlat.</li>
+        <li><strong>Gelişme:</strong> Yazışmaya konu olan çalışmanı ayrıntılı biçimde açıkla.</li>
+        <li><strong>Sonuç:</strong> Bu uzmana neden ulaşmak istediğini ve nasıl bir danışmanlık talep ettiğini açıkça belirt.</li>
+        <li>Mektubu <strong>mavi mürekkepli kalemle, elle</strong> yaz; resmî hitap, tarih, saygı ifadesi ve iletişim bilgilerini unutma.</li>
+      </ul>
+    </div>
+    <div class="btn-row"><button class="btn" id="s4-next">Etkinliği Tamamladım!</button></div>
+  `;
+  document.getElementById('s4-next').addEventListener('click', ()=> goTo(4));
+}
+
+/* ---------------- FINALE ---------------- */
+function renderFinale(panel){
+  const correctCount = quizState.filter(s=>s.correct).length;
+  let tier = 'Çırak Dedektif';
+  if(correctCount === quiz.length) tier = 'Usta Dedektif';
+  else if(correctCount >= quiz.length - 1) tier = 'Kıdemli Dedektif';
+  panel.innerHTML = `
+    <div class="finale">
+      <div class="big-seal">✓</div>
+      <h2>Dosya Tamamlandı!</h2>
+      <p>${historians.length} tarihçinin kimliğini ortaya çıkardın, alanlarını eşleştirdin ve dedektif sınavını tamamladın.</p>
+      <p>Sınav sonucun: <strong>${correctCount} / ${quiz.length}</strong></p>
+      <span class="score-tag">Rozetin: ${tier}</span>
+      <div class="btn-row"><button class="btn ghost" id="restart">Baştan Başla</button></div>
+    </div>
+  `;
+  document.getElementById('restart').addEventListener('click', ()=> goTo(0));
+}
+
+renderMap();
+renderPanel();
+</script>
+</body>
+</html>
