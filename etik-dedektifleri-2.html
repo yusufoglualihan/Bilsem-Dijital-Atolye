@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bilgetik Etik Dedektifleri: Yapay Zekânın Gizemli Dosyaları</title>
+<!-- Harici kaynak, analitik veya API anahtarı yoktur. İlerleme yalnızca tarayıcının localStorage alanında tutulur. -->
+<style>
+:root{--bg:#0b1030;--card:#161a47;--line:#3b3f94;--tx:#eef0ff;--mut:#b4b9e6;--tq:#2fe0d0;--gold:#ffc83d;--pur:#8b5cf6;--bad:#ffb089}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;color:var(--tx);font:18px/1.6 "Trebuchet MS","Segoe UI",system-ui,sans-serif;font:clamp(17px,2.1vw,20px)/1.6 "Trebuchet MS","Segoe UI",system-ui,sans-serif;
+background:radial-gradient(circle at 15% 0,#33247f,transparent 50%),radial-gradient(circle at 95% 100%,#0d5a73 0,transparent 40%),var(--bg)}
+main{max-width:860px;margin:0 auto;padding:18px 16px 60px}
+h1,h2,h3{font-family:Georgia,"Times New Roman",serif;line-height:1.25;margin:.3em 0}
+h1{font-size:28px;font-size:clamp(28px,6vw,46px);color:var(--gold)}
+h2{font-size:24px;font-size:clamp(24px,4.5vw,34px)}h3{font-size:19px;font-size:clamp(19px,3vw,24px)}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+[tabindex="-1"]:focus{outline:none}
+.card{background:linear-gradient(160deg,var(--card),#10143a);border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin:14px 0;box-shadow:0 8px 24px #0007}
+.tag{color:var(--tq);font-weight:700;margin:0 0 4px}
+.mut{color:var(--mut);font-size:.9em}
+blockquote{margin:12px 0;padding:10px 14px;border-left:5px solid var(--gold);background:#ffffff0d;border-radius:0 10px 10px 0;font-style:italic}
+.note{border:1px dashed var(--gold);border-radius:10px;padding:8px 12px;color:var(--gold);font-size:.92em}
+button{font:inherit;cursor:pointer}
+.btn{background:linear-gradient(135deg,var(--pur),#5b3fd0);color:#fff;border:2px solid #b9a4ff;border-radius:12px;padding:12px 22px;font-weight:700;margin:8px 8px 0 0;min-height:48px}
+.btn:hover{filter:brightness(1.15)}
+.btn.gold{background:linear-gradient(135deg,var(--gold),#e59b10);color:#1b1440;border-color:#fff1b8}
+.ghost{background:none;color:var(--tq);border:2px solid var(--tq);border-radius:12px;padding:8px 16px;margin:4px 8px 4px 0;min-height:44px}
+.opts{display:grid;gap:10px;margin:12px 0}
+.opt{text-align:left;color:var(--tx);background:#0d1138;border:2px solid var(--line);border-radius:12px;padding:12px 14px}
+.opt:hover:not(:disabled){border-color:var(--tq)}
+.opt.bad{border-color:var(--bad);background:#3a1f2d}
+.opt.good{border-color:var(--tq);background:#0b3b46}
+.opt:disabled{opacity:.7;cursor:default}.opt.good:disabled{opacity:1}
+.lbl{font-weight:700;color:var(--tq)}.bad .lbl{color:var(--bad)}
+.fb{margin-top:10px;padding:0;border-radius:10px}.fb:not(:empty){padding:10px 14px;background:#ffffff12}
+textarea{width:100%;font:inherit;color:var(--tx);background:#0a0d2e;border:2px solid var(--line);border-radius:10px;padding:10px;margin:4px 0 12px;resize:vertical}
+label{display:block;font-weight:600}
+.chk{display:flex;gap:10px;align-items:flex-start;background:#0d1138;border:2px solid var(--line);border-radius:12px;padding:10px 12px;margin:8px 0;font-weight:400}
+.chk input{width:22px;height:22px;margin-top:3px;accent-color:var(--tq)}
+details{margin:10px 0;color:var(--mut)}summary{cursor:pointer;color:var(--gold)}
+.bar{height:14px;background:#0a0d2e;border:1px solid var(--line);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--tq),var(--gold));transition:width .6s}
+.map{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.file{position:relative;text-align:left;color:var(--tx);background:#12164a;border:2px solid var(--line);border-radius:4px 18px 14px 14px;padding:16px 16px 14px;min-height:150px}
+.file::before{content:"";position:absolute;top:-10px;left:0;width:90px;height:12px;background:var(--line);border-radius:8px 8px 0 0}
+.file.open{border-color:var(--gold);box-shadow:0 0 18px #ffc83d44}.file.done{border-color:var(--tq)}
+.file:disabled{opacity:.55;cursor:not-allowed}
+.file b{display:block;font-family:Georgia,serif;font-size:1.15em}
+.seals{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:12px 0}
+.seal{width:96px;text-align:center;font-size:.8em}
+.seal span{display:grid;place-items:center;width:72px;height:72px;margin:0 auto 4px;border-radius:50%;font-size:34px;border:3px solid var(--gold);background:radial-gradient(#4a3a9c,#1a1450)}
+.seal.off span{filter:grayscale(1) opacity(.35);border-color:var(--line)}
+.big{font-size:80px;text-align:center;animation:pop .7s cubic-bezier(.2,1.6,.4,1)}
+.hero{font-size:64px;display:inline-block;animation:sweep 4s ease-in-out infinite}
+.seg{display:flex;gap:10px;flex-wrap:wrap}.seg .opt{flex:1;min-width:200px;text-align:center}.seg .opt[aria-pressed=true]{border-color:var(--gold);background:#3a2f7a}
+ol.rules{padding-left:22px}ol.rules li{margin:6px 0}
+@keyframes pop{from{transform:scale(.2) rotate(-25deg);opacity:0}}
+@keyframes sweep{50%{transform:rotate(-14deg) translateX(10px)}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media print{body{background:#fff;color:#000}.noprint{display:none}.card{box-shadow:none;border-color:#000;background:#fff}h1{color:#000}}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<noscript><p style="padding:20px;font:18px sans-serif">Bu oyun JavaScript gerektirir. Lütfen tarayıcınızda JavaScript'i açın.</p></noscript>
+<script>
+function showErr(m){var a=document.getElementById('app');if(a)a.innerHTML='<div style="padding:20px;font:18px system-ui,sans-serif"><h2>Sayfa yüklenemedi</h2><p>Tarayıcınız bu oyunu çalıştıramadı. Lütfen güncel Chrome, Edge, Firefox veya Safari ile açın.</p><p style="opacity:.6;font-size:14px">Hata: '+String(m).replace(/</g,'&lt;')+'</p></div>'}
+window.onerror=function(m){var a=document.getElementById('app');if(a&&!a.firstChild)showErr(m)};
+</script>
+<script>
+/* ================= İÇERİK (kolayca düzenlenebilir) =================
+   t:"mc"  -> çoktan seçmeli (o: seçenekler, c: doğru indeks, ok/no: geri bildirim)
+   t:"txt" -> kısa yazılı cevap (f: alan etiketleri) — otomatik değerlendirilmez
+   t:"pick"-> ilke seçimi (o: ilkeler, bad: yanlış ilkenin indeksi)                */
+const C=[
+{icon:"🏛️",title:"Kayıp Tarihî Gerçek",theme:"Bilgi doğrulama ve yapay zekâ halüsinasyonları",seal:"Bilgi Doğrulama Mührü",si:"🔍",
+ note:"ℹ️ Bu hikâye tamamen kurgusaldır. Anlatılan yapı, tarih ve kaynak gerçek değildir; gerçek bir tarihî yapı hakkında doğrulanmış bilgi olarak okunmamalıdır.",
+ story:"Bir öğrenci, Vezirköprü’deki kurgusal bir tarihî yapı hakkında yapay zekâdan bilgi ister. Yapay zekâ şöyle cevap verir:",
+ quote:"“Bu tarihî yapı 1872 yılında inşa edilmiştir. İlk olarak hastane olarak kullanılmış ve daha sonra müzeye dönüştürülmüştür. Bu bilgi, 1998 yılında yayımlanan Tarihî Yapılar Ansiklopedisi’nin 142. sayfasında yer almaktadır.”",
+ after:"Öğrenciler verilen kaynağı doğrulayamaz.",
+ take:"Kesin ve ayrıntılı görünen bilgi, doğru olduğunu kanıtlamaz.",rule:"Bilgiyi kullanmadan önce güvenilir kaynaklardan doğrula.",
+ tasks:[
+ {t:"mc",q:"Yapay zekânın cevabında hangi durum şüphe uyandırmaktadır?",
+  o:["Tarihî bir yapı hakkında bilgi vermesi.","Ayrıntılı tarih ve sayfa numarası vermesine rağmen kaynağın doğrulanamaması.","Uzun bir paragraf yazması.","Tarihî terimler kullanması."],c:1,
+  ok:"Ayrıntılı ve kesin görünen bilgiler, kaynağın gerçekten var olduğunu kanıtlamaz. Yapay zekâ bazen gerçekte olmayan kaynakları da inandırıcı biçimde üretebilir (halüsinasyon).",
+  no:"Bu özellik tek başına sorun değildir: yapay zekânın bilgi vermesi, uzun yazması ya da terim kullanması normaldir. Asıl soru şudur: verilen ayrıntıları ve kaynağı kontrol edebiliyor muyuz?",
+  hint:"Sayfa numarası ve yıl gibi kesin ayrıntılar neyi kanıtlar, neyi kanıtlamaz?"},
+ {t:"mc",q:"Hangi araştırma yolu daha güvenilirdir?",
+  o:["Yapay zekâ aynı cevabı ikinci kez verirse doğru kabul etmek.","Bir arkadaşın sosyal medya paylaşımına güvenmek.","İlgili müze, belediye, kültür envanteri veya güvenilir tarih kaynaklarını incelemek ve bilgileri karşılaştırmak.","Cevap ayrıntılı olduğu için doğrudan kullanmak."],c:2,
+  ok:"Birden fazla bağımsız ve güvenilir kaynağı karşılaştırmak, bilgiyi sınamanın en sağlam yoludur.",
+  no:"Tekrar eden cevap, paylaşım ya da ayrıntı doğruluğun kanıtı değildir. Aynı hata tekrar edilebilir; bağımsız ve güvenilir kaynaklarla karşılaştırmak gerekir.",
+  hint:"Bir tarihçi bir iddiayı kabul etmeden önce ne yapar?"},
+ {t:"txt",q:"Kaynağını doğrulayamadığın bilgiyi okulunun dijital müzesinde kullanır mısın? Neden?",f:["Kararın ve gerekçen"],
+  hint:"Müzeyi gezen herkes bu bilgiye güvenecek. Yanlışsa ne olur?"}]},
+
+{icon:"📷",title:"Unutulan Fotoğraf",theme:"Mahremiyet ve kişisel veriler",seal:"Mahremiyet Mührü",si:"🛡️",
+ story:"Bir öğrenci sunum hazırlamak için yapay zekâya sınıf arkadaşlarının fotoğraflarını, adlarını, telefon numaralarını ve bir arkadaşının özel ailevi sorununu yüklemeyi düşünür.",
+ take:"Başkasının bilgisi, onun iznine ve güvenine aittir.",rule:"Kişisel verileri paylaşmadan önce izin al, gerekli olanla sınırla.",
+ tasks:[
+ {t:"mc",q:"En riskli davranış hangisidir?",
+  o:["Sunum başlığı hakkında fikir istemek.","Kişisel veri içermeyen taslak hazırlatmak.","Bir arkadaşının özel ailevi sorununu ve kimliğini açığa çıkaran bilgileri izin almadan yüklemek.","Sunumun daha anlaşılır olması için öneri istemek."],c:2,
+  ok:"Kimliği belli eden özel bilgiyi izinsiz paylaşmak, o kişinin mahremiyetini ve güvenini zedeler; geri almak da çoğu zaman mümkün olmaz.",
+  no:"Bu seçenek kişisel veri içermiyor. Risk, kimliği belli eden ve özel bir durumu açığa çıkaran bilgilerin izinsiz paylaşılmasındadır.",
+  hint:"Hangi seçenekte bir insanın kimliği ve özel hayatı söz konusu?"},
+ {t:"mc",q:"En uygun yaklaşım hangisidir?",
+  o:["Bütün sınıf listesini yüklemek.","Fotoğrafları izin almadan yüklemek.","Kimliği ortaya çıkarmayan, gerekli bilgilerle sınırlı bir örnek kullanmak ve kullanılan aracın veri politikalarını dikkate almak.","Sohbeti silmenin bütün verileri her durumda sileceğini varsaymak."],c:2,
+  ok:"Veri azaltma ilkesi: sadece gerekli bilgiyi, kimliği gizleyerek kullan ve aracın verileri nasıl işlediğini öğren.",
+  no:"Gereğinden fazla veri paylaşmak ya da “silersem biter” diye varsaymak risklidir. Sohbeti silmek, verilerin her durumda silineceği anlamına gelmeyebilir; araçların veri politikaları farklıdır.",
+  hint:"Sunum için gerçek isimlere gerçekten ihtiyaç var mı?"},
+ {t:"txt",q:"Başkasına ait bir bilgiyi yapay zekâya yüklemeden önce nelere dikkat etmelisin?",f:["Dikkat edeceğin noktalar"],
+  hint:"İzin, gereklilik, kimliğin gizlenmesi ve aracın veri politikası üzerine düşün."}]},
+
+{icon:"⚖️",title:"Haksız Puanlama",theme:"Önyargı, adalet ve eşitlik",seal:"Adalet Mührü",si:"⚖️",
+ story:"Bir okulun yapay zekâ destekli değerlendirme sistemi geçmiş yıllardaki proje puanlarını inceler. Bazı öğrenciler geçmişte daha az proje imkânına sahip oldukları için düşük puanlar almıştır. Sistem, bu verilerden hareketle aynı gruptaki yeni öğrencilere de düşük başarı tahminleri vermektedir.",
+ take:"Veri geçmişi yansıtır; geçmişin haksızlığını da yansıtabilir.",rule:"Otomatik kararların farklı gruplar üzerindeki etkisini düzenli incele.",
+ tasks:[
+ {t:"mc",q:"Temel etik risk nedir?",
+  o:["Öğrencilerin farklı ilgi alanlarına sahip olması.","Geçmişteki eşitsizliklerin yeni kararlarda yeniden üretilmesi.","Projelerin farklı konularda hazırlanması.","Öğrencilerin farklı yöntemlerle çalışması."],c:1,
+  ok:"Sistem, düşük puanların nedenini (imkân eşitsizliği) bilmeden örüntüyü öğrenir ve aynı eşitsizliği geleceğe taşır. Buna algoritmik önyargı denir.",
+  no:"Farklı ilgi, konu ve yöntem normal ve değerli çeşitliliktir; sorun değildir. Sorun, geçmişteki eşitsizliğin verilere yerleşip yeni kararları da etkilemesidir.",
+  hint:"Düşük puanın sebebi öğrencinin yeteneği mi, imkânı mı?"},
+ {t:"mc",q:"Daha adil bir değerlendirme için ne yapılmalıdır?",
+  o:["Geçmiş puanları sorgulamadan kullanmak.","Düşük puan alan bütün öğrencileri başarısız kabul etmek.","Verilerin hangi koşullarda toplandığını incelemek, farklı gruplar üzerindeki sonuçları değerlendirmek ve insan denetimini sürdürmek.","Otomatik puanları kesin sonuç kabul etmek."],c:2,
+  ok:"Verinin bağlamını incelemek, sonuçları gruplar arasında karşılaştırmak ve insanın son sözü söylemesi adaleti güçlendirir.",
+  no:"Verileri sorgulamadan kullanmak ya da otomatik puanı kesin saymak, önyargıyı büyütür. Düşük puan, öğrenciyi başarısız yapmaz; çoğu zaman koşulları yansıtır.",
+  hint:"Hem veriye hem sonuca hem de karar verene bakmalısın."},
+ {t:"txt",q:"Bu sorunu azaltmak için hangi iki önlemi önerirsin?",f:["1. Önlem","2. Önlem"],
+  hint:"Veriyi, sonuçları ve insan rolünü düşün."}]},
+
+{icon:"✍️",title:"Görünmez Yazar",theme:"Akademik dürüstlük ve sorumlu kullanım",seal:"Akademik Dürüstlük Mührü",si:"✒️",
+ story:"Bir öğrenci sosyal bilgiler ödevini yetiştirmek için yapay zekâdan bütün araştırmayı yapmasını ve kaynakları eklemesini ister. Ayrıca öğretmenin metni tamamen kendisinin hazırladığını düşünmesini istediğini belirtir. Üretilen kaynakların bazıları doğrulanamamaktadır.",
+ take:"Yardım almak sorun değildir; yardımı gizlemek sorundur.",rule:"Yapay zekâ desteğini açıkça belirt, çalışmanın sorumluluğunu üstlen.",
+ tasks:[
+ {t:"mc",q:"Temel etik sorun nedir?",
+  o:["Konu hakkında fikir almak.","Bir kavramı açıklatmak.","Üretilen metni incelemeden ve kendi katkısını belirtmeden tamamen kendi çalışmasıymış gibi sunmak.","Araştırma planı hazırlatmak."],c:2,
+  ok:"Sorun yapay zekâyı kullanmak değil; incelemeden, katkıyı gizleyerek ve doğrulanamayan kaynaklarla “benim işim” demektir.",
+  no:"Fikir almak, kavram açıklatmak ve plan hazırlatmak, doğru kullanıldığında öğrenmeyi destekler. Sorun; metni incelemeden, katkıyı gizleyerek teslim etmektir.",
+  hint:"Sorun, yardımın kendisinde mi yoksa yardımın nasıl sunulduğunda mı?"},
+ {t:"mc",q:"En uygun yaklaşım hangisidir?",
+  o:["Metni doğrudan teslim etmek.","Kaynakları kontrol etmeden kullanmak.","Yapay zekâyı fikir geliştirmek için kullanmak, bilgileri doğrulamak, kendi analizini yapmak ve öğretmenin kurallarına uymak.","Cümleleri değiştirmeyi her durumda yeterli kabul etmek."],c:2,
+  ok:"Yapay zekâ bir yardımcıdır; düşünme, doğrulama ve analiz sende kalmalı. Öğretmenin kurallarına uymak da dürüstlüğün parçasıdır.",
+  no:"Metni olduğu gibi teslim etmek, kaynakları denetlememek ya da yalnızca cümleleri değiştirmek özgün emeği göstermez. Doğrulama ve kendi analizin şarttır.",
+  hint:"Ödevin düşünsel emeği kimde olmalı?"},
+ {t:"txt",q:"Yapay zekâdan destek alarak güvenilir ve özgün bir ödev hazırlamak için hangi adımları izlersin?",f:["İzleyeceğin adımlar"],
+  hint:"Plan, doğrulama, kendi analizin, kaynak gösterme ve öğretmenin kuralları."}]},
+
+{icon:"🧭",title:"İnsan mı, Makine mi?",theme:"İnsan denetimi, sorumluluk ve etik karar verme",seal:"Bilgetik Etik Dedektifi Rozeti",si:"🏅",
+ story:"Okul yönetimi, öğrencilerin projelerini değerlendirmek için yapay zekâ kullanmak ister. Ancak bazı projelerde yanlış bilgiler, kişisel veri riskleri ve adaletsiz puanlamalarla ilgili sorunlar fark edilir.",
+ take:"Sorumluluk makineye devredilemez.",rule:"Önemli kararlarda son söz her zaman insanda kalır.",
+ tasks:[
+ {t:"mc",q:"İlk yapılması gereken nedir?",
+  o:["Sistemi hemen kullanmak.","Puanları değiştirilemez kabul etmek.","Riskleri incelemek, bilgileri doğrulamak, kişisel verileri korumak ve insan denetimini sağlamak.","Yalnızca yüksek puan alan projeleri incelemek."],c:2,
+  ok:"Kullanmadan önce riskleri tanımak ve insan denetimini kurmak, önceki dört dosyadan öğrendiklerinin toplamıdır.",
+  no:"Sistemi denetimsiz kullanmak, puanları değiştirilemez saymak ya da yalnızca bazı projelere bakmak sorunları büyütür. Önce riskler incelenmeli ve insan denetimi sağlanmalıdır.",
+  hint:"Dört dosyada öğrendiklerini birleştir."},
+ {t:"pick",q:"Aşağıdaki ilkelerden üç etik ilke seç ve seçimini gerekçelendir.",
+  o:["Bilgileri doğrulamak.","Kişisel verileri korumak.","Adalet risklerini değerlendirmek.","Akademik dürüstlüğü gözetmek.","İnsan denetimini sağlamak.","Her yapay zekâ cevabını kesin doğru kabul etmek."],bad:5,f:["Seçimlerinin gerekçesi"],
+  no:"Bu bir etik ilke değildir. Yapay zekâ hata yapabilir, uydurabilir ve önyargı taşıyabilir; her cevabı kesin doğru saymak, ilk dosyadaki hatayı tekrarlamaktır.",
+  hint:"Biri yanlış ilke. Hangisi ilk dosyadaki dersle çelişiyor?"},
+ {t:"txt",q:"Senaryo: “Okul yönetimi, yapay zekâ sisteminin bütün projeleri otomatik olarak puanlamasını ve öğretmenlerin sonuçları değiştirmemesini önermektedir.”",
+  f:["1. Bu uygulamanın hangi riskleri vardır?","2. Sistemin kullanılabilmesi için hangi koşullar sağlanmalıdır?","3. İnsan denetiminin rolü ne olmalıdır?"],
+  hint:"Hata, veri, adalet ve itiraz hakkı üzerine düşün."}]}
+];
+
+/* ================= DURUM VE YARDIMCILAR ================= */
+const KEY="bilgetik-etik-dedektifleri-v1",app=document.getElementById("app");
+const dflt=()=>({mode:"bireysel",done:[],solved:{},txt:{},sel:{}});
+let S=(()=>{try{return Object.assign(dflt(),JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){return dflt()}})();
+let V="start",CH=0;
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const esc=s=>String(s||"").replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));
+// Seçenek sırası her açılışta karışır; böylece cevap harfi ezberlenemez
+C.forEach(c=>c.tasks.forEach(t=>{if(t.t=="mc"){t.ord=t.o.map((_,i)=>i).sort(()=>Math.random()-.5)}}));
+const seals=()=>`<div class=seals>${C.map((c,i)=>`<div class="seal${S.done.includes(i)?"":" off"}"><span aria-hidden=true>${c.si}</span>${S.done.includes(i)?"✔ ":"🔒 "}${c.seal}</div>`).join("")}</div>`;
+const prog=()=>{const p=S.done.length*20;return `<div class=bar role=progressbar aria-valuemin=0 aria-valuemax=100 aria-valuenow=${p} aria-label="İlerleme"><i style="width:${p}%"></i></div><p class=mut>${S.done.length}/5 mühür kazanıldı</p>`};
+function go(v,ch,focus){V=v;if(ch!==undefined)CH=ch;render(focus||"h1,h2");window.scrollTo(0,0)}
+
+/* ================= EKRANLAR ================= */
+function render(focus){
+ app.innerHTML=({start,map,chapter,sealScr,final})[V]();
+ const f=focus&&document.querySelector(focus);if(f){f.setAttribute("tabindex","-1");f.focus({preventScroll:focus.startsWith("#fb")?false:true})}
+}
+function start(){const has=S.done.length>0||Object.keys(S.solved).length>0;
+ return `<div class=card><div class=hero aria-hidden=true>🕵️</div><h1>Bilgetik Etik Dedektifleri</h1><p class=tag>Yapay Zekânın Gizemli Dosyaları</p>
+ <p><b>Yıl 2030.</b> Bir okulda kullanılan yapay zekâ sistemi bazı yanlış bilgiler üretmeye, kişisel verilerle ilgili riskler oluşturmaya ve adaletsiz değerlendirmelere yol açmaya başlamıştır.</p>
+ <p>Okulun yapay zekâ etik danışmanı <b>Bilgetik</b>, bu sorunları araştırmak için öğrenci dedektiflerden oluşan bir ekip kurar.</p>
+ <p>Göreviniz beş gizemli dosyayı çözmek, etik sorunları tespit etmek ve okulun güvenli yapay zekâ kullanım protokolünü hazırlamaktır.</p>
+ <blockquote>Unutmayın: Bir cevabın doğru görünmesi, onun doğru olduğunu kanıtlamaz!</blockquote>
+ <h2 style="font-size:1.1em">Nasıl oynayacaksınız?</h2><div class=seg role=group aria-label="Oyun türü">
+ <button class=opt aria-pressed=${S.mode=="bireysel"} onclick="setMode('bireysel')">👤 Bireysel Oyun</button>
+ <button class=opt aria-pressed=${S.mode=="grup"} onclick="setMode('grup')">👥 Grup Oyunu</button></div>
+ <p class=mut>🔒 Gizlilik: Ad, e-posta gibi bilgi istenmez. Hiçbir veri sunucuya gönderilmez. İlerlemen ve yazdığın cevaplar yalnızca bu tarayıcıda (yerel depolama) saklanır.</p>
+ <button class="btn gold" onclick="go('map')">${has?"Dedektiflik Görevine Başla (yeni oturum)":"Dedektiflik Görevine Başla"}</button>
+ ${has?`<button class=btn onclick="go('map')">Oyuna Devam Et</button><button class=ghost onclick="restart()">Oyunu Yeniden Başlat</button>`:""}</div>`}
+function setMode(m){S.mode=m;save();render()}
+function map(){const n=S.done.length;
+ return `<h1>Görev Haritası</h1><p>${S.mode=="grup"?"👥 Grup oyunu: kararları birlikte verin.":"👤 Bireysel oyun"}</p>${prog()}
+ <div class=map>${C.map((c,i)=>{const st=S.done.includes(i)?"done":i==n?"open":"lock";
+ return `<button class="file ${st}" ${st=="lock"?"disabled":""} onclick="go('chapter',${i})" aria-label="Dosya ${i+1}: ${c.title}. ${st=="done"?"Tamamlandı":st=="open"?"Açık":"Kilitli"}">
+ <span aria-hidden=true style="font-size:34px">${st=="lock"?"🔒":c.icon}</span><b>Dosya ${i+1}: ${c.title}</b><span class=mut>${c.theme}</span><br><span class=lbl>${st=="done"?"✔ Tamamlandı":st=="open"?"▶ Açık — başla":"🔒 Kilitli"}</span></button>`}).join("")}</div>
+ <h2 style="font-size:1.2em;margin-top:22px">Mühürlerin</h2>${seals()}
+ <button class=ghost onclick="go('start')">← Başlangıç</button><button class=ghost onclick="dl()">⬇ Cevaplarımı İndir (.txt)</button><button class=ghost onclick="restart()">Oyunu Yeniden Başlat</button>`}
+function chapter(){const c=C[CH];
+ let h=`<button class=ghost onclick="go('map')">← Görev Haritası</button><article class=card><p class=tag>${c.icon} Dosya ${CH+1}/5 · Etik tema: ${c.theme}</p><h2>${c.title}</h2>
+ ${c.note?`<p class=note>${c.note}</p>`:""}<p>${c.story}</p>${c.quote?`<blockquote>${c.quote}</blockquote>`:""}${c.after?`<p>${c.after}</p>`:""}</article>`;
+ let open=true;
+ c.tasks.forEach((t,i)=>{if(!open)return;h+=task(t,CH,i);if(!S.solved[CH+"-"+i])open=false});
+ if(open)h+=`<div class=card><p>🎉 Bu dosyadaki tüm görevleri tamamladın!</p><button class="btn gold" onclick="finish()">${c.si} Mührü Kazan</button></div>`;
+ return h}
+function task(t,ch,n){const k=ch+"-"+n,ok=S.solved[k];
+ let h=`<section class=card aria-labelledby="q${k}"><p class=tag>Görev ${n+1}</p><h3 id="q${k}">${t.q}</h3>`;
+ if(S.mode=="grup"&&!ok)h+=`<p class=mut>👥 Önce tartışın, sonra ortak kararınızı verin.</p>`;
+ if(t.t=="mc")h+=`<div class=opts role=group aria-labelledby="q${k}">`+t.ord.map((oi,p)=>{const g=ok&&oi==t.c;
+  return `<button class="opt${g?" good":""}" id="o${k}-${oi}" ${ok?"disabled":""} onclick="pick(${ch},${n},${oi})"><b>${"ABCD"[p]})</b> ${t.o[oi]}${g?` <span class=lbl>✔ Doğru</span>`:""}</button>`}).join("")+`</div>`;
+ else{
+  if(t.t=="pick")h+=`<p class=mut>Tam üç ilke seç.</p>`+t.o.map((o,i)=>`<label class=chk><input type=checkbox ${(S.sel[k]||[]).includes(i)?"checked":""} onchange="chk('${k}',${i},this.checked)"> <span>${o}</span></label>`).join("");
+  t.f.forEach((f,i)=>h+=`<label for="t${k}-${i}">${f}</label><textarea id="t${k}-${i}" rows=3 oninput="typ('${k}-${i}',this.value)">${esc(S.txt[k+"-"+i])}</textarea>`);
+  h+=`<p class=mut>✍️ Yazdıkların yalnızca bu tarayıcıda saklanır; doğru/yanlış diye değerlendirilmez.</p><button class=btn onclick="saveT(${ch},${n})">${ok?"Kararını Güncelle":"Kararını Kaydet"}</button>`}
+ h+=`<div class=fb id="fb${k}" aria-live=polite tabindex=-1>${ok?(t.t=="mc"?`✅ <b>Doğru!</b> ${t.ok}`:`✅ <b>Kaydedildi.</b> Cevabın korunuyor; istersen düzenleyebilirsin.`):""}</div>`;
+ return h+(t.hint&&!ok?`<details><summary>💡 Bilgetik’in ipucu</summary>${t.hint}</details>`:"")+`</section>`}
+function pick(ch,n,oi){const t=C[ch].tasks[n],k=ch+"-"+n,fb=document.getElementById("fb"+k),b=document.getElementById("o"+k+"-"+oi);
+ if(oi==t.c){S.solved[k]=1;save();render("#fb"+k);return}
+ b.classList.add("bad");if(!b.querySelector(".lbl"))b.insertAdjacentHTML("beforeend",` <span class=lbl>✖ Bu seçim uygun değil</span>`);
+ fb.innerHTML=`💭 <b>Henüz değil, tekrar dene.</b> ${t.no}`}
+function typ(id,v){S.txt[id]=v;save()}
+function chk(k,i,on){const a=new Set(S.sel[k]||[]);on?a.add(i):a.delete(i);S.sel[k]=[...a];save()}
+function saveT(ch,n){const t=C[ch].tasks[n],k=ch+"-"+n,fb=document.getElementById("fb"+k);let m="";
+ if(t.t=="pick"){const s=S.sel[k]||[];
+  if(s.length!=3)m="Tam üç ilke seçmelisin.";else if(s.includes(t.bad))m="💭 "+t.no}
+ if(!m&&t.f.some((_,i)=>(S.txt[k+"-"+i]||"").trim().length<8))m="Devam etmek için gerekçeni birkaç cümleyle yaz (her alan en az 8 karakter).";
+ if(m){fb.textContent=m;fb.focus();return}
+ S.solved[k]=1;save();render("#fb"+k)}
+function finish(){if(!S.done.includes(CH)){S.done.push(CH);S.done.sort();save()}go("sealScr")}
+function sealScr(){const c=C[CH],last=S.done.length==5;
+ return `<div class=card style="text-align:center"><div class=big aria-hidden=true>${c.si}</div><h2>${c.seal} kazanıldı!</h2>
+ <p><b>Dedektif notu:</b> ${c.take}</p><p class=mut>Protokol maddesi: ${c.rule}</p>${seals()}
+ ${last?`<button class="btn gold" onclick="go('final')">🏅 Finale Git</button>`:`<button class="btn gold" onclick="go('chapter',${CH+1})">Sonraki Dosyaya Geç</button>`}
+ <button class=ghost onclick="go('map')">Görev Haritası</button></div>`}
+function final(){return `<div class=card style="text-align:center"><div class=big aria-hidden=true>🏆</div><h1>Tebrikler, Bilgetik Etik Dedektifleri!</h1></div>
+ <div class=card><p>Beş gizemli dosyayı tamamladınız. Yapay zekâdan gelen bilgileri sorgulamanın, kişisel verileri korumanın, adalet risklerini fark etmenin ve etik kararlar vermenin önemini öğrendiniz.</p>
+ <p>Unutmayın: Yapay zekâyı sorumlu kullanmak, yalnızca doğru aracı seçmek değil; sonuçları değerlendirmek ve kendi kararlarımızın sorumluluğunu üstlenmektir.</p>${seals()}</div>
+ <div class=card><h2>📜 Okulun Güvenli Yapay Zekâ Protokolü</h2><p class=mut>Dedektif ekibinin beş dosyadan çıkardığı maddeler:</p><ol class=rules>${C.map(c=>`<li>${c.rule}</li>`).join("")}</ol></div>
+ <div class=noprint><button class="btn gold" onclick="restart()">Tekrar Oyna</button><button class=btn onclick="window.print()">🖨 Protokolü Yazdır</button><button class=ghost onclick="dl()">⬇ Cevaplarımı İndir</button><button class=ghost onclick="go('map')">Görev Haritası</button></div>`}
+
+/* ================= YENİDEN BAŞLAT / İNDİR ================= */
+function restart(){if(!confirm("Tüm ilerlemen ve yazdığın cevaplar silinecek. Yeniden başlamak istiyor musun?"))return;
+ try{localStorage.removeItem(KEY)}catch(e){}S=dflt();go("start")}
+function dl(){let o="Bilgetik Etik Dedektifleri — Yazılı Cevaplar\nOyun türü: "+S.mode+"\n\n";
+ C.forEach((c,ci)=>c.tasks.forEach((t,ti)=>{if(t.t=="mc")return;o+=`[${c.title} / Görev ${ti+1}] ${t.q}\n`;
+  if(t.t=="pick")o+="Seçilen ilkeler: "+(S.sel[ci+"-"+ti]||[]).map(i=>t.o[i]).join("; ")+"\n";
+  t.f.forEach((f,fi)=>o+=f+": "+(S.txt[ci+"-"+ti+"-"+fi]||"(boş)")+"\n");o+="\n"}));
+ const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([o],{type:"text/plain;charset=utf-8"}));a.download="bilgetik-cevaplarim.txt";document.body.appendChild(a);a.click();setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(a.href)},1500)}
+try{render()}catch(e){showErr(e&&e.message)}
+</script>
+</body>
+</html>

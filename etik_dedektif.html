@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="tr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bilgetik Etik Dedektifleri</title>
+<style>
+:root{--bg:#0b1630;--bg2:#12224a;--card:#17295a;--ac:#2ee6d0;--tx:#eaf1ff;--mu:#a9b8dc;--ok:#5be39b;--wa:#ffc861;--ln:#2b4382}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 20% 0,#1a2f66,var(--bg));color:var(--tx);font:17px/1.55 system-ui,Segoe UI,Roboto,sans-serif;min-height:100vh}
+#app{max-width:980px;margin:auto;padding:14px}
+h1,h2,h3{margin:.3em 0}h1{font-size:2rem}
+button,select,textarea,input{font:inherit}
+button{background:var(--ac);color:#06262a;border:0;border-radius:12px;padding:10px 16px;font-weight:700;cursor:pointer}
+button.g{background:transparent;color:var(--tx);border:2px solid var(--ln)}
+button:disabled{opacity:.4;cursor:not-allowed}
+:focus-visible{outline:3px solid #fff;outline-offset:2px}
+.card{background:var(--card);border:1px solid var(--ln);border-radius:16px;padding:14px;margin:10px 0;box-shadow:0 4px 14px #0005}
+.top{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.bar{height:12px;background:#0006;border-radius:9px;overflow:hidden;flex:1;min-width:140px}.bar i{display:block;height:100%;background:var(--ac);transition:width .4s}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.ch.lock{opacity:.5}.tag{color:var(--ac);font-weight:700;font-size:.85rem}
+.bil{display:flex;gap:10px;align-items:flex-start;background:#0a1d44;border:2px solid var(--ac);border-radius:16px;padding:10px;margin:10px 0}
+.bil b.av{font-size:1.8rem}.bil.ok{border-color:var(--ok)}.bil.wa{border-color:var(--wa)}
+.mark{background:#26407f;color:var(--tx);border:2px dashed var(--ac);padding:1px 6px;margin:0 1px;border-radius:8px;font-weight:500}
+.mark.seen{background:#14544f;border-style:solid}
+.sg{background:none;color:var(--tx);font-weight:400;padding:2px 4px;border:0;border-radius:6px;text-align:left;cursor:pointer;line-height:1.9}.sg:hover{background:#ffffff18}.sg.seen{background:#14544f;font-weight:600}.sg.no{opacity:.5;background:#0003}
+.cards{display:flex;flex-wrap:wrap;gap:8px}
+.k{background:#22397a;border:2px solid var(--ln);border-radius:12px;padding:8px 12px;color:var(--tx);font-weight:500;text-align:left;cursor:grab}
+.k[aria-pressed=true],.k.on{border-color:var(--ac);background:#1d5a73}.k.bad{border-color:var(--wa)}
+.bk{border:2px dashed var(--ln);border-radius:14px;padding:10px;min-height:90px;flex:1;min-width:210px;cursor:pointer}
+.bk.over{border-color:var(--ac);background:#ffffff10}.bk h4{margin:0 0 6px;color:var(--ac)}
+.row{display:grid;grid-template-columns:1fr minmax(160px,230px);gap:8px;align-items:center;margin:8px 0}
+@media(max-width:600px){.row{grid-template-columns:1fr}}
+select,textarea,input{background:#0a1530;color:var(--tx);border:2px solid var(--ln);border-radius:10px;padding:8px;width:100%}
+.sm{font-size:.9rem;color:var(--mu)}.fb{font-size:.9rem;margin-top:3px}
+.modal{position:fixed;top:0;left:0;right:0;bottom:0;background:#000b;display:flex;align-items:center;justify-content:center;padding:14px;z-index:9}
+.modal>div{background:#f6f1e3;color:#222;border-radius:12px;max-width:560px;width:100%;padding:18px;max-height:85vh;overflow:auto}
+.dots{display:flex;gap:6px;flex-wrap:wrap}.dots i{width:12px;height:12px;border-radius:50%;background:#0006;border:1px solid var(--ln)}.dots i.d{background:var(--ac)}.dots i.c{outline:2px solid #fff}
+.bd{display:inline-block;margin:4px;padding:6px 12px;border-radius:30px;background:#0006;border:2px solid var(--ln)}.bd.on{border-color:var(--wa);background:#5a4210}
+.cert{background:#fffaf0;color:#222;border:6px double #b8892b;text-align:center;padding:24px;border-radius:10px}
+.cert input{max-width:300px;background:#fff;color:#222;border-color:#b8892b;text-align:center}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media print{body{background:#fff;color:#000}#app>*:not(#fin){display:none}.noprint{display:none!important}.card{box-shadow:none;border-color:#999;background:#fff;color:#000}}
+</style></head><body>
+<main id="app"></main>
+<script>
+window.onerror=function(m,u,l){var a=document.getElementById('app');if(a&&!a.firstChild){a.innerHTML='<div style="padding:20px;font:18px system-ui"><h2>Sayfa yüklenemedi</h2><p>Tarayıcınız bu oyunu çalıştıramadı. Lütfen güncel Chrome, Edge, Firefox veya Safari ile açın.</p><p style="opacity:.6;font-size:14px">Hata: '+String(m).replace(/</g,'&lt;')+' (satır '+l+')</p></div>'}};
+</script>
+<script>
+const $=(s,e=document)=>e.querySelector(s);
+function h(t,a={},...c){const e=document.createElement(t);for(const k in a){if(k=='cls')e.className=a[k];else if(k.startsWith('on'))e[k]=a[k];else e.setAttribute(k,a[k])}[].concat.apply([],c).forEach(x=>e.appendChild(x&&x.nodeType?x:document.createTextNode(x==null?'':x)));return e}
+let S;try{S=JSON.parse(localStorage.getItem('bed'))}catch(e){}S=S||{d:{},b:{},r:{},n:''};
+const save=()=>{try{localStorage.setItem('bed',JSON.stringify(S))}catch(e){}};
+function rc(el,...c){while(el.firstChild)el.removeChild(el.firstChild);[].concat.apply([],c).forEach(x=>{if(x||x===0)el.appendChild(x.nodeType?x:document.createTextNode(x))})}
+const app=$('#app');
+
+/* ===== İÇERİK ===== */
+const BR=['Bilgi Doğrulama Rozeti','Mahremiyet Koruyucusu Rozeti','Adalet Tasarımcısı Rozeti','Akademik Dürüstlük Rozeti','Bilgetik Etik Dedektifi Sertifikası'];
+const C=[
+{n:'Kayıp Tarihî Gerçek',k:'Bilgi doğrulama ve kaynak değerlendirme',ic:'🏛️',st:[
+{t:'story',ti:'Gizemli Mesaj',x:'ACİL DURUM! Çınaraltı Kent Müzesi’nin (kurgusal) dijital sergisi için hazırlanan Saat Kulesi dosyasında şüpheli bilgiler tespit edildi. Yapay zekâ ayrıntılı bir açıklama ve kaynakça yazdı; ama araştırmacılar kaynakların bir kısmını doğrulayamıyor. Dedektif, dosyayı incele ve gerçeği ortaya çıkar!'},
+{t:'docs',ti:'Araştırma Masası',x:'Masadaki 5 öğenin hepsini aç ve oku. Hepsi olayın çözümünde işine yarayacak.',d:[
+['📄 Yapay zekânın açıklaması','Çınaraltı Saat Kulesi 1900 yılında hizmete açılmıştır. Yapının planı Mimar Selim Arda’nın “Anadolu’da Saat Kuleleri” kitabında anlatılır. Kulenin ilk saati Avrupa’daki en büyük saattir. Belediye arşivindeki 12 numaralı inşa defteri çalışmaları kaydetmiştir.'],
+['📚 Kaynakça listesi','1) Müze resmî sitesi, “Tarihçe” sayfası. 2) Arda, S., Anadolu’da Saat Kuleleri (künye yapay zekâ tarafından yazılmış; kütüphane kaydı bulunamadı). 3) Belediye Arşivi, İnşa Defteri no. 12. 4) Aydın, M., Kent Saatleri (kütüphane kaydı mevcut).'],
+['📝 Araştırmacının notu','“Müze sitesi açılış için 1900 diyor. Arşivdeki defter ise inşaatın 1897’de başladığını gösteriyor. Arda’nın kitabını katalogda bulamadım ama bu henüz kitabın var olmadığını göstermez. ‘En büyük saat’ ifadesinin kaynağı yok.”'],
+['🖼️ Kule görseli','Eski bir fotoğraf. Altındaki not: “Fotoğraf: arşiv, tarih belirtilmemiş.” Fotoğrafta saat kulesi tamamlanmış görünüyor ama çekim tarihi bilinmiyor.'],
+['📋 Kısa rapor','Belediye arşivi raporu: Kule inşaatı 1897’de başlamış, 1900’de ana yapı bitmiştir. Raporda açılış töreninin tarihi yoktur.']]},
+{t:'find',ti:'Mini oyun: Kayıp İpuçlarını Bul',x:'Aşağıdaki metin yapay zekânın yazdığı açıklamadır. Doğrulama açısından önemli BEŞ cümleyi bul ve tıkla: şüpheli olanlar da, güçlü kanıta dayananlar da birer ipucudur. Dikkat: bazı cümleler yalnızca bağlam ya da süstür!',
+cl:['a','b','c','d','e'],
+sg:[['x','Bu metin, müzenin dijital sergisi için hazırlanmış bir giriş taslağıdır.'],['a','Çınaraltı Saat Kulesi 1900 yılında hizmete açılmıştır.'],['b','Yapının planı Mimar Selim Arda’nın “Anadolu’da Saat Kuleleri” kitabında anlatılır.'],['y','Sergide bu bölüm sesli rehberle de dinlenebilecektir.'],['c','Kulenin ilk saati Avrupa’daki en büyük saattir.'],['d','Belediye arşivindeki 12 numaralı inşa defteri çalışmaları kaydetmiştir.'],['e','Saatin mekanizması yerli ustalarca yapılmıştır (Aydın, Kent Saatleri).'],['z','Metin, sergi panosunda kısa bir tanıtım olarak da kullanılacaktır.']],
+no:'Bu cümle bir bilgi iddiası taşımıyor; sergi hazırlığına dair bir not. Kanıtı sorgulanması gereken ya da kanıtı güçlü olan bir cümle ara.',
+n:{a:'Açılış tarihi için elimizde yalnızca müze sitesi var; arşiv raporu açılış tarihi vermiyor. Bu bir çelişki değil ama doğrulanmalı.',b:'Bu künyeyi yapay zekâ yazmış ve katalogda bulunamadı. “Doğrulanamadı” demek “yok” demek değil; araştırmaya devam!',c:'Bu iddianın kaynağı belirtilmemiş. Kanıt olmadan sergiye giremez.',d:'Resmî bir belgeye atıf. Kontrol edilebilir ve diğer kayıtlarla uyumlu: güçlü bir ipucu.',e:'Kaynağı kütüphane kaydı olan bir kitap. Bu bilgi kaynakla desteklenmiş görünüyor.'}},
+{t:'assign',ti:'Mini oyun: Kaynak Avcısı',x:'Dört kaynağı incele ve her birini değerlendir.',o:['Güvenilir; yine de diğer kayıtlarla karşılaştırırım','Kanıt değil; en fazla ipucu olabilir','Henüz doğrulanamadı; araştırmaya devam ederim'],i:[
+['A · Müze resmî sitesi — Kurum: Çınaraltı Kent Müzesi; yazar: müze uzmanları; kurumsal site, iletişim bilgisi var.',[0],'Kurumsal ve sorumlusu belli; ama tek başına tarih için yeterli olmayabilir, arşivle karşılaştır.'],
+['B · Sosyal medya paylaşımı — “Kule 1850’de yapıldı!” Yazar belirtilmemiş, kaynak gösterilmemiş; arşiv kaydıyla çelişiyor.',[1],'Yazarı ve kaynağı yok, arşivle çelişiyor: kanıt değil, en fazla ipucu.'],
+['C · Kütüphane kitabı — Aydın, M., Kent Saatleri. Kütüphane kataloğunda kaydı var; yazar ve yayınevi belli.',[0],'Kaydı ve yazarı doğrulanabiliyor; saat mekanizması konusunda kullanılabilir.'],
+['D · Yapay zekânın künyesi — “Arda, S., Anadolu’da Saat Kuleleri.” Kütüphane kaydı bulunamadı.',[2],'Bulunamaması kitabın kesinlikle olmadığı anlamına gelmez; kütüphanelere sor, yazarı ara.']]},
+{t:'sort',ti:'Mini oyun: Bilgi mi, Tahmin mi?',x:'Bir cümleyi seç, sonra bir alana tıkla (ya da sürükleyip bırak).',b:['Kanıtla destekleniyor','Tahmin veya iddia','Ek araştırma gerekiyor'],c:[
+['“Müzenin resmî sitesinde yapının 1900’de açıldığı yazıyor.”',[0,2],'Kaynağı belli bir ifade; yine de başka kayıtlarla karşılaştırmak gerekir.'],
+['“Arşiv defterine göre inşaat 1897’de başlamıştır.”',0,'Belgeye dayalı, kaynağı belli bir ifade.'],
+['“Bence bu yapı kesinlikle 1800’lerde yapılmıştır.”',1,'“Bence” ve “kesinlikle” birlikte: kanıt yok, kişisel iddia.'],
+['“Yapay zekâ bu tarihi verdiği için doğrudur.”',1,'Bir bilginin kaynağının yapay zekâ olması doğruluğunu kanıtlamaz.'],
+['“İki kaynak farklı tarihler veriyor; daha fazla inceleme gerekiyor.”',[0,2],'Çelişen kaynaklar varsa araştırma sürmeli.'],
+['“Fotoğrafın altında tarih yok; ne zaman çekildiği bilinmiyor.”',[0,2],'Tarihi bilinmeyen bir belge için ek araştırma gerekir.']]},
+{t:'sort',ti:'Ana görev: Dijital Müzeyi Kurtar',x:'Bilgi kartlarını sergi kararına göre yerleştir. Araştırma Masası’ndaki belgeleri hatırla.',b:['Sergiye eklenebilir','Ek araştırma gerekiyor','Mevcut kanıtlarla kullanılmamalı'],c:[
+['Kule’nin inşasına 1897’de başlandı.',0,'Arşiv defteri ve arşiv raporu aynı tarihi gösteriyor; bilgi belgeye dayalı.'],
+['Kule’nin saati Avrupa’daki en büyük saattir.',[1,2],'Kaynak yok. Kanıt bulunmuyor ama araştırılabilir; bulunana kadar sergiye girmemeli.'],
+['Kule 1850’de yapıldı.',2,'Mevcut güvenilir kayıtlarla çelişiyor.'],
+['Kule’nin fotoğrafı 1900’de çekilmiştir.',[1,2],'Fotoğrafın altında tarih yok; bu bir tahmin. Ek araştırma gerekir.'],
+['Arda’nın kitabı kesinlikle yoktur.',2,'Kitabın bulunamaması var olmadığını göstermez; bu iddia da kanıtsız.']]},
+{t:'twist',ti:'Beklenmedik olay: Yeni Kanıt!',x:'Belediye meclis tutanağı bulundu: “Saat Kulesi’nin açılış töreni 1902 baharında yapıldı.” Bu, müzenin 1900 tarihiyle çelişiyor. 1900, yalnızca ana yapının bitiş tarihi olabilir mi? Kararın ne?',ch:[['Sergiye “açılış 1900” yazarım.','Yeni kanıtı görmezden gelmiş olursun. Tutanağı da hesaba katan başka bir karar dene.',0],['“Yapı 1900’de bitti, açılış töreni 1902’de yapıldı” yazarım ve tutanağı kaynak gösteririm.','İki kaynağı uzlaştıran, ihtiyatlı bir karar. Kararını yeni kanıta göre güncellemek bilimsel bir davranıştır.'],['Müzeye danışıp ek araştırma yaparım.','Yeni kanıtlar çıktığında yeniden araştırmak dikkatli bir araştırmacının işidir.']]},
+{t:'report',ti:'Dijital Dedektif Raporu',x:'Raporunu kendi cümlelerinle yaz. Her kutuya en az bir tam cümle yaz ve görevdeki belgelere, kanıtlara dayan. Ekranda saklanır ve final ekranında görünür.',f:[
+['İncelenen iddia',1,'kule|saat|acil|1900|1897|1902|avrupa|en buyuk|kitab|arda|tarih','Bu kutuda incelediğin iddiayı yaz: kuleyle ilgili hangi bilgiyi araştırdın?'],
+['Bulunan kanıtlar',1,'arsiv|defter|tutanak|meclis|rapor|muze|kutuphane|aydin|katalog|fotograf|kayit|1897|1902','Bu kutuda hangi belge, kayıt veya kaynakların neyi gösterdiğini yaz.'],
+['Doğrulanamayan noktalar',1,'dogrulanama|dogrulanmad|kaynagi yok|kaynak yok|kaynaksiz|en buyuk|avrupa|arda|kitab|kunye|katalog|bulunamad|celis|belirsiz|emin degil|tarih yok','Bu kutuda hangi bilgilerin doğrulanamadığını ya da kaynağının bulunamadığını yaz.'],
+['Son karar ve gerekçem',2,'sergi|ekle|yaz|cikar|kullan|arastir|karar|cunku|kanit|tutanak|arsiv|kaynak|1900|1902|1897','Bu kutuda sergi için kararını ve hangi kanıta dayandığını (nedenini) yaz.']]}]},
+
+{n:'Unutulan Fotoğraf',k:'Kişisel veriler ve mahremiyet',ic:'📸',st:[
+{t:'story',ti:'Acil Sunum',x:'Bir öğrenci (kurgusal) projeyi yetiştirmeye çalışıyor. Yapay zekâ aracından yardım almak için elindeki bütün belgeleri yüklemek üzere. Belgeler: sınıf listesi, bir öğrencinin fotoğrafı, proje taslağı, bir arkadaşın özel mesajı, kişisel bilgi içermeyen örnek metin.'},
+{t:'sort',ti:'Mini oyun: Veri Ayıklama Makinesi',x:'Hangi belgeler görev için gerekli ve paylaşılabilir? Hangileri paylaşılmamalı ya da önce düzenlenmeli?',b:['Gerekli ve paylaşılabilir','Paylaşma ya da önce düzenle'],c:[
+['📄 Proje taslağı',0,'Görev için gerekli. İçinde isim varsa yine de bir kontrol et.'],
+['📝 Kişisel bilgi içermeyen örnek metin',0,'Görev için işe yarar ve kimseyi tanımlamaz.'],
+['📋 Sınıf listesi',1,'Görev için gerekli değil ve birçok kişinin bilgisi var. Senin paylaşma yetkin olmayabilir.'],
+['🧑 Bir öğrencinin fotoğrafı',1,'Yüz, kişiyi tanımlar. İzin olmadan paylaşılmamalı ve görev için gerekli değil.'],
+['💬 Arkadaşın özel mesajı',1,'Başkasına ait özel bilgi. İzni olmadan paylaşma.']]},
+{t:'assign',ti:'Mini oyun: Veri Sızıntısını Durdur',x:'Belgeyi paylaşmadan önce her alan için bir işlem seç.',o:['Olduğu gibi bırak','Kaldır','Anonimleştir ([…] ile değiştir)'],i:[
+['Ad soyad: Deniz Yalçın',[1,2],'Kimliği doğrudan tanımlıyor.'],['Telefon: 0555 000 00 00',[1],'Projeyle ilgisi yok. Kaldırmak en güvenli yol.'],['Proje başlığı: “Saat Kulesi’nin Tarihi”',[0],'Göreve gerekli ve kimseyi tanımlamaz.'],['Sınıf ve okul: 7-B, Çınar Ortaokulu',[1,2],'Tek başına masum görünse de ad ile birleşince kişiyi bulmayı kolaylaştırır.'],['Genel bilgi: “Kule 19. yy sonunda inşa edildi.”',[0],'Kişisel veri değil.']]},
+{t:'proto',ti:'Ana görev: Güvenli Paylaşım Planı',x:'Güvenli paylaşım planına yalnızca uygun adımları seç.',c:[
+['Gereksiz kişisel bilgileri çıkar',1,'Plana bir kişisel veri filtresi ekle.'],['Başkasına ait özel bilgileri paylaşma',1,'Başkasının mahremiyetini koruyan bir adım ekle.'],['İzinleri ve okul kurallarını kontrol et',1,'İzin ve kural kontrolü eksik.'],['Aracın veri koşullarını incele',1,'Aracın verileri nasıl kullandığını incelemeyi unutma.'],['Yalnızca gerekli bilgileri paylaş',1,'Veri minimizasyonu eksik: yalnızca gerekeni paylaş.'],['Her şeyi yükle, araç kendi ayıklar',0,'Araç ayıklasa bile veri artık paylaşılmış olur. Bu adımı çıkar.'],['Arkadaşımın mesajını izin sormadan yükle',0,'İzinsiz paylaşım başkasının mahremiyetini ihlal eder. Bu adımı çıkar.'],['Aracın kullanım şartlarını okumadan kabul et',0,'Verinin nasıl kullanılacağını bilmeden onay verilmez. Bu adımı çıkar.']]},
+{t:'twist',ti:'Beklenmedik olay',x:'Bildirim: “Sunum için başka bir öğrencinin özel mesajı da gerekli!” Gerçekten gerekli mi?',ch:[['Mesajı yüklerim.','Önce gerekliliği ve izni değerlendirmelisin. Özel mesaj sunum için şart olmayabilir; başka bir seçenek dene.',0],['Mesajı yüklemem; gerekli kısmı kendi cümlelerimle özetlerim.','Güvenli bir alternatif: gerekli bilgi paylaşılır, özel metin paylaşılmaz.'],['Önce arkadaşımdan ve öğretmenimden izin isterim.','İzin istemek saygılı bir adım. İzin olsa bile gerekli olup olmadığını da düşün.']]},
+{t:'report',ti:'Kişisel Veri Kontrol Listem',x:'Kendi kontrol listeni yaz. Her kutuya en az bir tam cümle yaz.',f:[
+['Paylaşmadan önce kendime soracağım soru',1,'gerek|izin|kisisel|kimlik|tanim|paylas|mahrem|telefon|baskas|ozel|kimin|kime|veri','Bu kutuda, bir şeyi paylaşmadan önce kendine soracağın bir soruyu yaz.'],
+['Başkalarının verilerini nasıl korurum?',1,'izin|paylasma|cikar|anonim|gizle|sakla|kaldir|mahrem|ozel|kisisel|sorar|koru|ifsa','Bu kutuda başkalarının bilgilerini korumak için ne yapacağını yaz.'],
+['Bir aracın veri koşullarında neye bakarım?',1,'saklan|sakla|egitim|paylas|ucuncu|silin|silme|silebil|gizlilik|politika|veriler|verimi|verilerimi|nerede|kullanim|kullanil|kosul|sart','Bu kutuda aracın verileri nasıl kullandığına ve sakladığına dair neye bakacağını yaz.']]}]},
+
+{n:'Haksız Puanlama',k:'Adalet, önyargı ve algoritmik kararlar',ic:'⚖️',st:[
+{t:'story',ti:'Başarı Tahmini Tuhaflığı',x:'Bir okulda yapay zekâ destekli bir sistem proje başarısını tahmin ediyor. Ama geçmişte daha az imkâna sahip olduğu için düşük puan almış bazı öğrencileri sürekli “düşük başarı” grubuna koyuyor. Bunu araştır! (Tüm veriler kurgusaldır.)'},
+{t:'sort',ti:'Mini oyun: Veri Dedektifi',x:'Tablo: Deniz (çok kaynak) → yüksek; Ece (sınırlı kaynak) → düşük; Mert (çok kaynak) → yüksek; Zeynep (sınırlı kaynak) → düşük. Hangi veriler daha anlamlı bir değerlendirme sağlar?',b:['Daha anlamlı ölçüt','Tek başına yeterli değil'],c:[
+['Projenin içeriği',0,'Öğrencinin gerçek çalışmasını doğrudan gösterir.'],['Kaynakların niteliği',[0,1],'Çalışmanın niteliğini gösterir; ama kaynağa erişim imkânına da bağlı olabilir.'],['Sahip olunan araçlar',1,'Çalışmadan çok imkânı yansıtır.'],['Öğrencinin gerçek çalışma kanıtları',0,'Çaba ve gelişimi gösterir.'],['Geçmiş başarı puanı',1,'Bazen işe yarar ama tek belirleyici olursa koşullar göz ardı edilir.']]},
+{t:'assign',ti:'Mini oyun: Adalet Terazisi',x:'Her ölçüt için olası etkisini seç. Birden fazla yaklaşım savunulabilir.',o:['Çalışmayı doğrudan yansıtır','İmkânı yansıtabilir','Bağlama göre değişir'],i:[
+['İçeriğin doğruluğu',[0],'Çalışmanın kendisini ölçer.'],['Özgünlük',[0,2],'Çalışmayı ölçer; ama nasıl ölçüldüğüne dikkat edilmeli.'],['Kaynakların niteliği',[0,2],'Çalışmayı gösterir; fakat kaynağa erişim imkânına da bağlı olabilir.'],['Sahip olunan araç sayısı',[1],'Çalışmadan çok sahip olunan imkânı yansıtabilir.']]},
+{t:'proto',ti:'Ana görev: Sistemi Yeniden Tasarla',x:'Yeni sürüm için adımları seç.',c:[
+['İçerik kalitesi ölçütü ekle',1,'Çalışmayı doğrudan ölçen bir ölçüt ekle.'],['“Araç sayısı” ölçütünü kaldır',1,'İmkânı ölçen ölçüt sorun yaratıyor.'],['İnsan değerlendirmesi aşaması ekle',1,'Kritik bir kontrol eksik: insan değerlendirmesi.'],['Farklı gruplardaki sonuçları izleyen bir kontrol noktası ekle',1,'Sonuçların farklı gruplarda nasıl çıktığını izlemelisin.'],['Geçmiş puanı tek ölçüt yap',0,'Tek ölçüt sorunu büyütür. Bu adımı çıkar.'],['Sonuçlara itiraz edilmesini engelle',0,'İtiraz yolu kapanırsa hatalar fark edilmez. Bu adımı çıkar.'],['Sistemi bir kez test et, sonra bir daha bakma',0,'Adalet bir kez ayarlanıp bırakılmaz; izlemek gerekir. Bu adımı çıkar.']],
+sim:'Simülasyon (KURGUSAL, gerçek veri değil): Eski sistem: Ece düşük, Zeynep düşük. Yeni sistem: Ece orta, Zeynep yüksek. Sonuçlar eğitim amaçlı örnektir.'},
+{t:'twist',ti:'Beklenmedik olay',x:'Bilgetik: “Yeni ölçütlerle bile bazı öğrenciler hâlâ düşük çıkıyor. Bir düzenleme yaptık diye sistemin tamamen adil olduğunu söyleyebilir miyiz?”',ch:[['Evet, düzelttik.','Tek bir düzenleme adaleti garanti etmez; izlemeye devam etmeliyiz. Başka bir seçenek dene.',0],['Hayır; sonuçları izlemeye ve gerektiğinde insan değerlendirmesine başvurmaya devam ederim.','Doğru yön: adalet bir kez ayarlanıp bırakılan bir şey değildir.'],['Sistemi tamamen kapatırım.','Bu da bir seçenek; ama sistemin bazı faydaları olabilir. Düzeltme ve denetim alternatiflerini düşün.']]},
+{t:'report',ti:'İyileştirme Raporu',x:'Raporunu yaz. Her kutuya en az bir tam cümle yaz ve görevde gördüklerine dayan.',f:[
+['Belirlenen sorun',1,'onyargi|adaletsiz|haksiz|imkan|arac|gecmis|dusuk|puan|ayrim|esitsiz|kaynak|sistem|adalet','Bu kutuda sistemde fark ettiğin sorunu yaz: kim, neden haksız etkileniyor?'],
+['Soruna ilişkin kanıtlar',1,'ece|zeynep|deniz|mert|tablo|dusuk|yuksek|sinirli|cok kaynak|gecmis|puan|surekli|sonuc|veri','Bu kutuda sorunu gösteren kanıtları (tablodaki sonuçlar gibi) yaz.'],
+['Yaptığım değişiklikler',1,'icerik|arac sayisi|olcut|insan|degerlendirme|kaldir|ekle|kontrol|izle|grup|kalite','Bu kutuda sistemde hangi değişiklikleri yaptığını yaz.'],
+['Kalan riskler ve önerdiğim kontroller',1,'risk|izle|denetim|insan|kontrol|grup|duzenli|tekrar|yeniden|test|geri bildirim|itiraz|onyargi|hala','Bu kutuda hâlâ kalan riskleri ve önerdiğin kontrolleri yaz.']]}]},
+
+{n:'Görünmez Yazar',k:'Akademik dürüstlük ve sorumlu kullanım',ic:'✍️',st:[
+{t:'story',ti:'Son Teslim Tarihi',x:'Bir öğrenci sosyal bilgiler ödevini yetiştirmeye çalışıyor. Yapay zekâ uzun bir metin yazdı; ama bazı kaynaklar doğrulanamıyor, bazı iddialar kanıtsız ve öğrencinin kendi değerlendirmesi yok. Metni güvenilir bir araştırma dosyasına dönüştür!'},
+{t:'assign',ti:'Mini oyun: Metin Tamircisi',x:'Her cümle için bir işlem seç ve en altta kendi yorumunu yaz.',o:['Olduğu gibi koru','Kaynak gerekli diye işaretle','Metinden çıkar'],cm:[1,'kaynak|kanit|dogrula|kendi|yorum|gerek|arastir|guvenilir|iddia|cikar|isaretl|metin|bence|dusun|cunku','Bu kutuda cümlelerle ilgili kararlarını ve nedenini (kanıt, kaynak gibi) kendi cümlelerinle yaz.'],i:[
+['Çınaraltı Saat Kulesi belediye arşivinde kayıtlı bir yapıdır. (Arşiv kaydı doğrulandı)',[0],'Doğrulanmış bilgi, kalabilir.'],['Kule, dünyanın en güzel saat kulesidir.',[1,2],'Kanıtsız ve ölçülemeyen bir iddia: kaynak gerekli ya da çıkarılmalı.'],['Yapay zekâ modelleri çok popülerdir.',[2],'Araştırma sorusuyla ilgisiz.'],['Kule, şehrin kimliği açısından önemlidir.',[1],'Yorum olabilir; ama gerekçe ve kaynak gerekli.']]},
+{t:'assign',ti:'Mini oyun: Kaynak Eşleştirme',x:'İddiayı gerçekten destekleyen kaynağı seç. Kelime benzerliği yetmez.',o:['Belediye arşiv raporu (1900’de ana yapı bitti)','Belediye nüfus tablosu (1900: 12.000 kişi)','Aydın, Kent Saatleri (yerli ustalar)','Hiçbir kaynak yeterli değil'],i:[
+['Kule 1900’de açıldı.',[3],'Arşiv raporu ana yapının bitişinden söz ediyor; açılış tarihi için başka kayıt gerekir.'],['1900’de kentin nüfusu 12.000’di.',[1],'Nüfus tablosu doğrudan destekliyor.'],['Saat mekanizması yerli ustalarca yapıldı.',[2],'Kitap bu konuyu doğrudan anlatıyor.'],['Kule dünyanın en sağlam kulesidir.',[3],'Hiçbir kaynak bunu desteklemiyor.']]},
+{t:'report',ti:'Ana görev: Araştırma Dosyanı Oluştur',x:'Yapay zekâ senin yerine yazan biri değil, araştırmana yardım eden bir yardımcı olmalı. Her kutuya kendi cümlelerinle en az bir tam cümle yaz.',f:[
+['Araştırma sorum',1,'kule|saat|nasil|neden|ne zaman|hangi|?|acil|tarih','Bu kutuya kuleyle ilgili merak ettiğin bir araştırma sorusu yaz.'],
+['Kaynaklardan elde ettiğim bilgiler',1,'arsiv|muze|kitap|aydin|defter|kutuphane|yerli usta|1900|1897|1902|mekanizma|kayit|rapor','Bu kutuda kaynaklardan öğrendiğin somut bilgileri yaz.'],
+['Yapay zekânın katkısı',1,'yapay|taslak|ozet|fikir|yardim|oneri|duzelt|yazim|arac|metin','Bu kutuda yapay zekânın sana nasıl yardım ettiğini yaz.'],
+['Kendi değerlendirmem',1,'bence|dusunuyorum|degerlendir|karar|yorum|gore|cunku|guvenilir|yeterli|eksik|kanit|kendi','Bu kutuda kendi görüşünü ve nedenini yaz.'],
+['Kaynak kontrolüm',1,'kontrol|dogrula|kutuphane|katalog|arsiv|kaynak|karsilastir|ikinci|baska|tarih|yazar|kunye|dogru','Bu kutuda kaynakları nasıl kontrol ettiğini yaz.'],
+['Sonuç',1,'sonuc|kule|kanit|guvenilir|dogrulan|ozetle|kisaca|karar|kaynak|dusunuyorum|arastirma|ogrendim','Bu kutuda araştırmanın sonucunu kısaca yaz.']]},
+{t:'twist',ti:'Beklenmedik olay',x:'Bir kaynak kartı uyarıyor: “Bu kaynağın verdiği bilgiyi doğrulayamadık!” Ne yaparsın?',ch:[['İddiayı daha fazla araştırırım.','Güzel! Doğrulanamayan bilgiyi araştırmak güvenilirliği artırır.'],['Başka bir kaynak bulurum.','İyi: iddia için farklı bir destek ararsın.'],['Kanıt yoksa iddiayı metinden çıkarırım.','Dürüst bir seçim: kanıtsız iddia kalmasın.']]}]},
+
+{n:'İnsan mı, Makine mi?',k:'Etik karar verme ve insan denetimi',ic:'🤖',st:[
+{t:'story',ti:'Son Kriz',x:'Okul yönetimi, yapay zekânın tüm proje değerlendirmelerini otomatik yapmasını istiyor. Ama sen yanlış bilgi, kişisel veri riski, adaletsizlik ve doğrulanmamış kaynak sorunlarıyla karşılaştın. Şimdi okul için güvenli bir kullanım protokolü hazırlamalısın.'},
+{t:'docs',ti:'Mini oyun: Etik Güvenlik Duvarı',x:'Beş güvenlik kapısının hepsini aç ve olayı oku. Her kapıda bir risk var; çözümleri sonraki görevlerde sen bulacaksın.',d:[
+['🚪 1 · Bilgi doğrulama','Bir yapay zekâ cevabında kaynağı bulunamayan bir iddia var ve okul duyurusuna konmak üzere.'],
+['🚪 2 · Mahremiyet','Paylaşılacak bir belgede öğrencilerin telefon numaraları yer alıyor.'],
+['🚪 3 · Adalet','Bir değerlendirme sistemi, belirli bir öğrenci grubunun sürekli düşük puan almasına yol açıyor.'],
+['🚪 4 · Akademik dürüstlük','Kaynakları kontrol edilmemiş, yapay zekâ yazımı bir ödev teslim edilmek üzere.'],
+['🚪 5 · İnsan denetimi','Öğrencinin geleceğini etkileyebilecek önemli bir karar otomatik olarak veriliyor.']]},
+{t:'assign',ti:'Mini oyun: Acil Durum Masası',x:'Üç sorun aynı anda belirdi. Her biri için en uygun ilk adımı seç.',o:['Doğrulama sürecini başlat','Paylaşmadan önce kişisel verileri düzenle','Sonuçları incelemek için kontrol adımı ekle','Yok say'],i:[
+['Bir bilgi doğrulanamıyor.',[0],'Önce doğrulama süreci gerekli.'],['Bir belgede kişisel veri var.',[1],'Paylaşmadan önce düzenle.'],['Bir ölçüt adaletsiz sonuç verebilir.',[2],'Sonuçları gruplara göre izleyen bir kontrol ekle.']]},
+{t:'proto',ti:'Büyük final: Bilgetik Protokolünü Oluştur',x:'Kartlarla okul için bir etik kullanım protokolü oluştur. Birden fazla makul protokol olabilir ama kritik adımlar eksik kalmamalı.',save:'proto',c:[
+['Bilgiyi doğrula',1,'Protokolünde bilgilerin doğruluğunu kontrol eden bir aşama bulunmuyor. Kaynağı belirsiz bir bilgi doğrudan kullanılabilir.'],['Gereksiz kişisel verileri paylaşma',1,'Protokolünde kişisel bilgilerin korunmasına yönelik bir kontrol bulunmuyor.'],['Olası önyargıları incele',1,'Adalet kontrolü eksik: önyargıyı kim, nasıl inceleyecek?'],['Akademik dürüstlüğü gözet',1,'Akademik dürüstlük adımı yok.'],['Önemli kararları uygun insan denetiminde tut',1,'Önemli sonuçlar doğurabilecek kararların yalnızca otomatik sistemlere bırakılmaması gerektiğini değerlendirmelisin.'],['Sonuçları yeniden değerlendir',1,'Yeni kanıtlar geldiğinde kararları yeniden değerlendirecek bir adım ekle.'],['Önemli kararları tamamen yapay zekâya bırak',0,'Bu adım protokolden çıkmalı.'],['Kaynağı belirsiz bilgiyi olduğu gibi kullan',0,'Kaynağı doğrulanmamış bilgi kullanılmamalı. Bu adım protokolden çıkmalı.'],['Hata fark edilse de protokolü hiç değiştirme',0,'Yeni kanıt ya da hata çıkınca protokol güncellenmeli. Bu adım protokolden çıkmalı.']]}
+]}];
+
+/* ===== YARDIMCILAR ===== */
+const total=C.reduce((a,c)=>a+c.st.length,0);
+const dn=()=>Object.keys(S.d).length;
+const rank=()=>{const p=dn()/total;return p>=1?'Baş Dedektif':p>.6?'Kıdemli Dedektif':p>.3?'Dedektif':'Çırak Dedektif'};
+function modal(title,txt){const m=h('div',{cls:'modal',role:'dialog','aria-modal':'true'},h('div',{},h('h3',{},title),h('p',{},txt),h('button',{onclick:()=>{m.remove();prev&&prev.focus()}},'Kapat')));const prev=document.activeElement;document.body.append(m);$('button',m).focus();m.onkeydown=e=>{if(e.key=='Escape')$('button',m).click()}}
+const fold=t=>(t||'').toLocaleLowerCase('tr').replace(/\u0307/g,'').replace(/ç/g,'c').replace(/ş/g,'s').replace(/ğ/g,'g').replace(/ı/g,'i').replace(/ö/g,'o').replace(/ü/g,'u').replace(/[âáà]/g,'a').replace(/[îí]/g,'i').replace(/û/g,'u').replace(/\s+/g,' ');
+function chkTxt(v,need,kw){const t=fold(v),w=t.split(/[^a-z0-9]+/).filter(x=>x.length>1);if(w.length<5||new Set(w).size<4)return 'kisa';return kw.split('|').filter(k=>t.includes(k)).length>=need?'':'konu'}
+const KISA='En az bir tam cümle yaz (en az 5 kelime).';
+function shuf(a){return a.map(x=>[Math.random(),x]).sort((x,y)=>x[0]-y[0]).map(x=>x[1])}
+
+/* ===== ANA EKRAN ===== */
+function home(){
+rc(app,
+h('div',{cls:'top'},h('div',{},h('h1',{},'🕵️ Bilgetik Etik Dedektifleri'),h('div',{cls:'sm'},'Rütben: '+rank())),h('div',{},h('button',{cls:'g',onclick:()=>modal('Nasıl oynanır?','Bölümü seç, belgeleri incele, ipuçlarını bul, kartları yerleştir. Kart sürüklemek zorunda değilsin: kartı seç, sonra alana tıkla. Takıldığında İpucu butonuna bas. Yanlış yaparsan sorun yok, tekrar deneyebilirsin. İlerlemen bu cihazda saklanır.')},'❓ Yardım')," ",h('button',{cls:'g',onclick:()=>{if(confirm('Bütün ilerleme silinsin mi?')){S={d:{},b:{},r:{},n:''};save();home()}}},'🗑️ Sıfırla'))),
+h('div',{cls:'bil'},h('b',{cls:'av'},'🦉'),h('div',{},'Merhaba Dedektif! Yapay zekâ dünyasında çözülmesi gereken bazı gizemler var. Belgeleri incele, ipuçlarını topla, sorunları çöz ve Bilgetik’e yardım et!')),
+h('div',{cls:'top'},h('span',{},`İlerleme: ${dn()}/${total} görev`),h('div',{cls:'bar',role:'progressbar','aria-valuenow':dn(),'aria-valuemax':total},h('i',{style:'width:'+dn()/total*100+'%'}))),
+h('div',{cls:'grid'},C.map((c,i)=>{const lock=i>0&&!S.b[i-1]&&!C[i].st.some((_,j)=>S.d[i+'.'+j]);const n=c.st.filter((_,j)=>S.d[i+'.'+j]).length;
+return h('div',{cls:'card ch'+(lock?' lock':'')},h('div',{cls:'tag'},'BÖLÜM '+(i+1)),h('h2',{},c.ic+' '+c.n),h('div',{cls:'sm'},c.k),h('p',{},S.b[i]?'🏅 '+BR[i]+' kazanıldı':`${n}/${c.st.length} görev`),h('button',lock?{disabled:'',title:'Önce önceki bölümü bitir'}:{onclick:()=>step(i,S.b[i]?0:Math.min(n,c.st.length-1))},lock?'🔒 Kilitli':S.b[i]?'Yeniden oyna':n?'Devam et':'Başla'))})),
+h('div',{cls:'card'},h('b',{},'Rozetler: '),BR.map((b,i)=>h('span',{cls:'bd'+(S.b[i]||(i==4&&S.b[4])?' on':'')},(S.b[i]?'🏅 ':'⬜ ')+b))),
+S.b[4]?h('button',{onclick:final},'🎓 Final ekranını gör'):'');
+}
+
+/* ===== ADIM MOTORU ===== */
+function step(ci,si){
+const c=C[ci],s=c.st[si],id=ci+'.'+si;let hn=0;
+const fb=h('div',{cls:'bil','aria-live':'polite'},h('b',{cls:'av'},'🦉'),h('span',{},s.t=='story'?'':'Hazır olduğunda başla. Takılırsan İpucu butonuna bas.'));
+const say=(m,k)=>{fb.className='bil '+(k||'');fb.lastChild.textContent=m};
+const nx=h('button',{disabled:''},si==c.st.length-1?'Bölümü bitir ✔':'Devam →');
+const ok=()=>{if(!S.d[id]){S.d[id]=1;save()}nx.disabled=false;dots()};
+nx.onclick=()=>{if(si<c.st.length-1)step(ci,si+1);else{S.b[ci]=1;save();ci==4?final():(modal('🏅 Rozet kazandın!',BR[ci]),home())}};
+const dotsEl=h('div',{cls:'dots'});const dots=()=>rc(dotsEl,c.st.map((_,j)=>h('i',{cls:(S.d[ci+'.'+j]?'d ':'')+(j==si?'c':'')})));dots();
+const hints=({find:['Bilgetik: Her cümleye sor: Bu bilgi kanıtla destekleniyor mu, yoksa kaynağı sorgulanmalı mı?','Bilgetik: Tarih, kitap, “en büyük” gibi iddialara ve belge atıflarına dikkat et.'],report:['Bilgetik: Görevin belgelerine geri dön; kendi cümlelerinle, somut bilgileri kullanarak yaz.','Bilgetik: Her kutuya en az bir tam cümle yaz ve görevde geçen kavramlara değin.']})[s.t]||['Bilgetik: Bu görevin ilk cümlesini ve belgeleri yeniden oku. Hangi bilgi kanıtla destekleniyor?','Bilgetik: Emin olamadığın kartı önce “ek araştırma” ya da “paylaşma” gibi daha ihtiyatlı bir yere koymayı dene, sonra gerekçeni düşün.'];
+const body=h('div',{cls:'card'},h('div',{cls:'tag'},`BÖLÜM ${ci+1} · ${c.n} · Görev ${si+1}/${c.st.length}`),h('h2',{},s.ti),s.x?h('p',{},s.x):'');
+T[s.t](s,id,body,say,ok);
+if(S.d[id])nx.disabled=false;
+rc(app,h('div',{cls:'top'},h('button',{cls:'g',onclick:home},'← Harita'),dotsEl,h('span',{cls:'sm'},rank())),body,fb,h('div',{cls:'top'},s.t=='story'?h('span'):h('button',{cls:'g',onclick:()=>say(hints[Math.min(hn++,1)])},'💡 İpucu'),nx));
+if(s.t=='story')ok();
+scrollTo(0,0)}
+
+const T={
+story(s,id,b,say,ok){ok()},
+docs(s,id,b,say,ok){const seen=new Set();const w=h('div',{cls:'cards'});s.d.forEach((d,i)=>{const k=h('button',{cls:'k',onclick:()=>{seen.add(i);k.classList.add('on');k.textContent='✔ '+d[0];modal(d[0],d[1]);if(seen.size==s.d.length){say('Hepsini inceledin! Ayrıntıları not et.','ok');ok()}}},d[0]);w.append(k)});b.append(w)},
+find(s,id,b,say,ok){const seen=new Set();let wr=0;const p=h('p',{});s.sg.forEach(g=>{const bt=h('button',{cls:'sg',onclick:()=>{if(s.cl.includes(g[0])){seen.add(g[0]);bt.className='sg seen';say(s.n[g[0]]+` (${seen.size}/${s.cl.length})`,'ok');if(seen.size==s.cl.length){say('Beş ipucunun hepsini buldun! '+s.n[g[0]],'ok');ok()}}else{wr++;bt.className='sg no';say(s.no+(wr>2?' Rastgele tıklamak yerine her cümlenin kanıtını düşün.':''),'wa')}}},g[1]);p.append(bt,' ')});b.append(p)},
+sort(s,id,b,say,ok){let sel=null,left=s.c.length;const pool=h('div',{cls:'cards'});const bw=h('div',{cls:'cards',style:'margin-top:10px'});
+const place=(k,bi)=>{const ix=+k.dataset.i,cd=s.c[ix];if([].concat(cd[1]).includes(bi)){bks[bi].append(k);k.draggable=false;k.disabled=true;k.setAttribute('aria-pressed','false');k.classList.add('on');say('✔ '+cd[2],'ok');sel=null;if(--left==0){say('Hepsi yerinde! '+cd[2],'ok');ok()}}else{k.classList.add('bad');say('Henüz değil. Bu kartın kanıtını ve kaynağını yeniden düşün, sonra başka bir alanı dene.','wa');setTimeout(()=>k.classList.remove('bad'),900)}};
+const ks=shuf(s.c.map((c,i)=>i)).map(i=>{const k=h('button',{cls:'k','aria-pressed':'false',draggable:'true','data-i':i,onclick:()=>{pool.querySelectorAll('.k').forEach(x=>x.setAttribute('aria-pressed','false'));if(sel==k){sel=null;return}sel=k;k.setAttribute('aria-pressed','true');say('Kartı seçtin. Şimdi bir alana tıkla.')}},s.c[i][0]);k.ondragstart=e=>{e.dataTransfer.setData('t',i);sel=k};return k});
+const bks=s.b.map((n,bi)=>{const d=h('div',{cls:'bk',tabindex:'0',role:'button','aria-label':'Alan: '+n,onclick:()=>{if(sel&&!sel.disabled)place(sel,bi);else say('Önce bir kart seç.')},onkeydown:e=>{if(e.key=='Enter'||e.key==' '){e.preventDefault();d.click()}}},h('h4',{},n));d.ondragover=e=>{e.preventDefault();d.classList.add('over')};d.ondragleave=()=>d.classList.remove('over');d.ondrop=e=>{e.preventDefault();d.classList.remove('over');const k=ks.find(x=>x.dataset.i==e.dataTransfer.getData('t'));if(k&&!k.disabled)place(k,bi)};return d});
+ks.forEach(k=>pool.append(k));bks.forEach(d=>bw.append(d));b.append(pool,bw)},
+proto(s,id,b,say,ok){const on=new Set(),w=h('div',{cls:'cards'});shuf(s.c.map((c,i)=>i)).forEach(i=>{const c=s.c[i];const k=h('button',{cls:'k','aria-pressed':'false',onclick:()=>{on.has(i)?on.delete(i):on.add(i);k.setAttribute('aria-pressed',on.has(i));k.classList.toggle('on',on.has(i))}},c[0]);w.append(k)});
+const go=h('button',{onclick:()=>{const bad=s.c.filter((c,i)=>!c[1]&&on.has(i)),miss=s.c.filter((c,i)=>c[1]&&!on.has(i));if(bad.length)return say(bad[0][2],'wa');if(miss.length)return say(miss[0][2],'wa');if(s.save){S.r[id]=[...on].map(i=>s.c[i][0]).join(' → ');save()}say('Harika! '+(s.sim||'Planın eksiksiz. Birden fazla makul sıralama olabilir; önemli olan kritik adımların yerinde olması.'),'ok');ok()}},'Kontrol et');b.append(w,h('p',{}),go)},
+assign(s,id,b,say,ok){const sels=[],fbs=[],att=[];s.i.forEach((it,i)=>{const sl=h('select',{'aria-label':it[0]},h('option',{value:''},'— seç —'),s.o.map((o,j)=>h('option',{value:j},o)));const f=h('div',{cls:'fb sm'});sels.push(sl);fbs.push(f);b.append(h('div',{cls:'row'},h('div',{},it[0],f),sl))});
+let ta,tf;if(s.cm){ta=h('textarea',{rows:3,placeholder:'Kendi değerlendirmeni buraya yaz…'});tf=h('div',{cls:'fb sm'});b.append(h('p',{},'Kendi yorumun:'),ta,tf)}
+b.append(h('button',{onclick:()=>{let all=1;s.i.forEach((it,i)=>{const v=sels[i].value;if(v===''){fbs[i].textContent='Bir seçim yap.';all=0}else if(it[1].includes(+v)){fbs[i].textContent='✔ '+it[2]}else{att[i]=(att[i]||0)+1;fbs[i].textContent=att[i]>1?'✖ Bir daha düşün. İpucu: '+it[2].split(/[.;]/)[0]+'.':'✖ Bir daha düşün.';all=0}});
+if(ta){const r=chkTxt(ta.value,s.cm[0],s.cm[1]);if(r){all=0;tf.textContent='✖ '+(r=='kisa'?KISA:s.cm[2])}else tf.textContent='✔ Güzel yorum!'}
+say(all?'Hepsi yerinde, tebrikler!':'Bazı seçimleri ya da yorumunu gözden geçir; yanlış yapmak serbest.',all?'ok':'wa');if(all)ok()}},'Kontrol et'))},
+twist(s,id,b,say,ok){const w=h('div',{});shuf(s.ch).forEach(c=>{const k=h('button',{cls:'k',style:'display:block;width:100%;margin:6px 0',onclick:()=>{w.querySelectorAll('.k').forEach(x=>x.classList.remove('on'));k.classList.add('on');if(c[2]===0){say(c[1],'wa');return}say(c[1]+' İstersen kararını değiştirebilirsin; bu bir başarısızlık değil.','ok');ok()}},c[0]);w.append(k)});b.append(w)},
+report(s,id,b,say,ok){const tas=[],fbs=[];s.f.forEach((f,i)=>{const k=id+'.'+i;const t=h('textarea',{rows:3,'aria-label':f[0]});t.value=S.r[k]||'';t.oninput=()=>{S.r[k]=t.value;save()};const fb=h('div',{cls:'fb sm'});tas.push(t);fbs.push(fb);b.append(h('label',{},h('b',{},f[0])),t,fb)});
+const go=h('button',{onclick:()=>{let all=1;tas.forEach((t,i)=>{const f=s.f[i],r=chkTxt(t.value,f[1],f[2]);if(!r)fbs[i].textContent='✔ Güzel!';else{all=0;fbs[i].textContent='✖ '+(r=='kisa'?KISA:f[3])}});say(all?'Raporun hazır ve kaydedildi. Final ekranında görünecek.':'Bazı kutular eksik ya da konuyla ilgisiz görünüyor. İşaretli kutuları kendi cümlelerinle geliştir.',all?'ok':'wa');if(all)ok()}},'📝 Raporu kontrol et');b.append(h('p',{}),go)}
+};
+
+/* ===== FİNAL ===== */
+function final(){
+const ms=[];C.forEach((c,ci)=>c.st.forEach((s,si)=>{if(s.t=='report')s.f.forEach((f,i)=>{const v=S.r[ci+'.'+si+'.'+i];if(v)ms.push(h('p',{},h('b',{},`B${ci+1} · ${f[0]}: `),v))})}));
+const pr=S.r['4.3'];
+const nm=h('input',{placeholder:'(isteğe bağlı) adını yaz','aria-label':'Sertifika için ad (isteğe bağlı)',value:S.n||''});const nv=h('div',{},S.n||'');nm.oninput=()=>{S.n=nm.value;nv.textContent=nm.value;save()};
+rc(app,h('div',{id:'fin'},h('h1',{},'🎉 TEBRİKLER, ETİK DEDEKTİFİ!'),
+h('p',{},'Beş bölüm boyunca bilgi doğrulama, mahremiyet, adalet, akademik dürüstlük ve insan denetimi konularında görevleri tamamladın. Artık yapay zekâ kullanırken yalnızca ne yapabildiğini değil, nasıl ve hangi sorumluluklarla kullanman gerektiğini de değerlendirebilirsin.'),
+h('div',{cls:'card'},BR.map((b,i)=>h('span',{cls:'bd'+(S.b[i]?' on':'')},(S.b[i]?'🏅 ':'⬜ ')+b)),h('p',{},`Tamamlanan görev: ${dn()}/${total}`)),
+pr?h('div',{cls:'card'},h('h3',{},'📜 Bilgetik Protokolüm'),h('p',{},pr)):'',
+h('div',{cls:'card'},h('h3',{},'📁 Raporlarım'),ms.length?ms:h('p',{cls:'sm'},'Henüz rapor yazılmadı.')),
+h('div',{cls:'cert'},h('h2',{},'Bilgetik Etik Dedektifi Sertifikası'),nv,h('p',{},'Bu sertifika, oyundaki görevlerin tamamlandığını gösterir. Bilimsel olarak doğrulanmış bir etik yeterlik belgesi değildir.'),h('div',{cls:'noprint'},nm)),
+h('div',{cls:'noprint top'},h('button',{onclick:()=>print()},'🖨️ Yazdır / PDF'),h('button',{cls:'g',onclick:()=>{const t=ms.map(p=>p.textContent).join('\n')+(pr?'\nProtokol: '+pr:'');navigator.clipboard&&navigator.clipboard.writeText(t).then(()=>alert('Kopyalandı'),()=>alert('Kopyalanamadı'))}},'📋 Metni kopyala'),h('button',{cls:'g',onclick:home},'🗺️ Haritaya dön'),h('button',{cls:'g',onclick:()=>{if(confirm('Oyun baştan başlasın mı?')){S={d:{},b:{},r:{},n:''};save();home()}}},'🔄 Yeniden başlat'))))}
+home();
+</script></body></html>
